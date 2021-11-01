@@ -4,7 +4,7 @@ spring:
     name: our_land
 
   datasource:
-    url: jdbc:mysql://39.99.140.114:3306/3219005448?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://39.99.140.114:3306/our_land?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
     password: whibin
     driver-class-name: com.mysql.cj.jdbc.Driver
