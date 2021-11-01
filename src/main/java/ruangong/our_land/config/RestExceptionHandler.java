@@ -20,7 +20,6 @@ import java.util.Set;
  * @Date: 2021/11/1 15:06
  * @describe:
  */
-@Slf4j
 @RestControllerAdvice
 public class RestExceptionHandler {
 
