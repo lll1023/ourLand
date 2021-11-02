@@ -1,0 +1,16 @@
+# ????
+spring:
+  application:
+    name: our_land
+
+  datasource:
+    url: jdbc:mysql://39.99.140.114:3306/our_land?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+    username: root
+    password: whibin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  config: classpath:log4j2.xml
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
