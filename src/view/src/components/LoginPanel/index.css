@@ -1,0 +1,12 @@
+.panel-container {
+  height: 200px;
+  width: 200px;
+}
+
+.panel {
+  width: 100%;
+  height: 100%;
+}
+.btn-panel {
+  width: 100%;
+}

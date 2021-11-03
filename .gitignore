@@ -34,3 +34,6 @@ build/
 
 ### SpringBoot ###
 src/main/resources/*.yml
+
+### React ###
+node_modules
