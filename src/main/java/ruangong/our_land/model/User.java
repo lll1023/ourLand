@@ -1,5 +1,11 @@
 package ruangong.our_land.model;
 
+/**
+ * @Author: LianWL
+ * @Date: 2021/11/5 14:23
+ * @Description: 用户类
+ */
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
