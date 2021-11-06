@@ -1,9 +1,13 @@
 package ruangong.our_land.model.spirit;
 
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.lang.NonNull;
 import ruangong.our_land.model.helper.ObjectHelper;
 import ruangong.our_land.model.spirit.monster.Monster;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,43 +20,57 @@ import java.util.Map;
  * @date Created in 2021-11-02 22:57
  * @Modified By
  */
+@Data
 public abstract class Spirit {
 
     /**
      * 精灵的最高等级
      */
+    @Max(value = 100, message = "等级最高为100")
     public static final int MAX_LEVEL = 100;
 
     /**
      * 精灵名
      */
     @NonNull
+    @Getter
     private final String name;
 
     /**
      * 精灵的id
      */
     @NonNull
+    @Getter
     private final String id;
     /**
      * 等级
      */
+    @Getter
+    @Min(value = 1, message = "等级最低为1")
     private int level;
     /**
      * 血量
      */
+    @Getter
+    @Min(value = 0)
     private int blood;
     /**
      * 攻击力
      */
+    @Getter
+    @Min(value = 0)
     private int attack;
     /**
      * 防御力
      */
+    @Getter
+    @Min(value = 0)
     private int defense;
     /**
      * 速度
      */
+    @Getter
+    @Min(value = 0)
     private int speed;
 
     /**
@@ -107,17 +125,6 @@ public abstract class Spirit {
         return skillMap.get(skill);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public int getLevel() {
-        return level;
-    }
 
     /**
      * 升级，使level+1
@@ -128,32 +135,16 @@ public abstract class Spirit {
         }
     }
 
-    public int getBlood() {
-        return blood;
-    }
-
     public void setBlood(int blood) {
         this.blood = ObjectHelper.verifyNonZeroPositive(blood, "blood");
-    }
-
-    public int getAttack() {
-        return attack;
     }
 
     public void setAttack(int attack) {
         this.attack = ObjectHelper.verifyNonZeroPositive(attack, "attack");
     }
 
-    public int getDefense() {
-        return defense;
-    }
-
     public void setDefense(int defense) {
         this.defense = ObjectHelper.verifyNonZeroPositive(defense, "defense");
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 
     public void setSpeed(int speed) {
@@ -163,39 +154,31 @@ public abstract class Spirit {
     /**
      * 技能类
      */
+    @Data
     public static class Skill {
         //技能基本属性
         /**
          * 技能名
          */
         @NonNull
+        @Getter
         String name;
         /**
          * 技能描述
          */
         @NonNull
+        @Getter
         String description;
         /**
          * 技能使用次数
          */
+        @Getter
         int times = 0;
 
         //构造方法
         public Skill(String name, String descrp) {
             this.name = ObjectHelper.requireNonNull(name, "name");
             this.description = ObjectHelper.requireNonNull(descrp, "descrp");
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public int getTimes() {
-            return times;
         }
 
         public void setTimes(int times) {
