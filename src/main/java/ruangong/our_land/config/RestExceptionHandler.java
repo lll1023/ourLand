@@ -77,6 +77,7 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResultInfo exceptionHandler(Exception  e){
+        e.printStackTrace();
         return ResultInfo.error(500,"系统未知错误");
     }
 }
