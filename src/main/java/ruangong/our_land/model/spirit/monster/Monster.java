@@ -4,8 +4,8 @@ import ruangong.our_land.model.spirit.Spirit;
 
 /**
  * 野怪类，野怪可捕捉
- *
  * @author wizardk
+ * @author HuangZhiquan
  * @email ozx1341530199@gmail.com
  */
 public abstract class Monster extends Spirit {
@@ -18,8 +18,8 @@ public abstract class Monster extends Spirit {
      */
     protected static final int EXP_CONSTANT = 100;
 
-    public Monster(String name, String id, int level, int blood, int attack, int defense, int speed) {
-        super(name, id, level, blood, attack, defense, speed);
+    public Monster(String name, String id, int level, int blood, int attack, int defense, int speed,String type,String nature,int isRare) {
+        super(name, id, level, blood, attack, defense, speed,type,nature,isRare);
     }
 
     /**
@@ -27,5 +27,13 @@ public abstract class Monster extends Spirit {
      * @param gained 获取到的经验值
      */
     public abstract void gainExp(int gained);
+
+    /**
+     * 当野怪被击败后，给予用户精灵经验
+     * @return 经验值
+     */
+    public int getExp(){
+        return EXP_CONSTANT;
+    }
 
 }
