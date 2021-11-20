@@ -34,8 +34,8 @@ public abstract class Own extends Spirit {
     private int exp = 0;
 
     //构造方法
-    public Own(String name, String id, int level, int blood, int attack, int defense, int speed, String type, String nature,int isRare) {
-        super(name, id, level, blood, attack, defense, speed, type, nature,isRare);
+    public Own(String name, String id, int level, int blood, int attack, int defense, int speed, String type, String nature, int isRare) {
+        super(name, id, level, blood, attack, defense, speed, type, nature, isRare);
     }
 
     /**
@@ -43,25 +43,35 @@ public abstract class Own extends Spirit {
      * 有必要的等级判断
      */
     public void levelUP() {
-        if (this.level < MAX_LEVEL){
+        if (this.level < MAX_LEVEL) {
             int upNum = exp / 100;
-            if(this.level + upNum <= MAX_LEVEL){
+            if (this.level + upNum <= MAX_LEVEL) {
                 int currentLevel = this.level + upNum;
                 this.level = currentLevel;
-            }else if(this.level + upNum > MAX_LEVEL){
+            } else if (this.level + upNum > MAX_LEVEL) {
                 this.level = MAX_LEVEL;
             }
-        }else{
+        } else {
             this.level = MAX_LEVEL;
         }
     }
 
     /**
      * 更新精灵经验累计值，用于更新等级
+     *
      * @param gain 击败野怪或boss后所获得的经验值
      */
-    public void newExp(int gain){
+    public void newExp(int gain) {
         this.exp = this.exp + gain;
+    }
+
+    /**
+     * 精灵的属性应该根据其等级的提升而增强，但为了方便，规定精灵等级提升仅仅增加血量，而
+     * 攻击力、防御力、速度三项属性不变。
+     * 精灵血量与等级的关系：当前血量 = 原血量 + (当前等级-1)*0.1
+     */
+    public void updateSpirit() {
+        this.blood = (int) (this.blood + ((this.level - 1) * 0.1));
     }
 
 }
