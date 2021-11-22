@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Input, Button } from 'antd'
 import './index.css'
+// 登录注册模块
 export default class LoginPanel extends Component {
   state = {
     username: '',

@@ -4,6 +4,7 @@ import './index.css'
 import Button from '../../components/Button'
 import LoginPanel from '../../components/LoginPanel'
 
+// 主页模块
 function Home () {
   let [isClick, setClick] = useState(false)
   if (isClick) {
