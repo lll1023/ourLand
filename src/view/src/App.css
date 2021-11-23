@@ -38,6 +38,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 }
 .flex-end-center {
   display: flex;
@@ -48,6 +49,12 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: center;
+}
+.flex-between-center-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 }
 .flex-around-center {
@@ -65,6 +72,12 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: stretch;
+}
+.flex-start-stretch-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: stretch;
 }
 

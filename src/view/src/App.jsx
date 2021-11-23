@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { HashRouter, Route } from 'react-router-dom'
 import './App.css'
-import Home from './views/Home/index'
-import Main from './views/Main'
+import { route } from "./utils/route";
 
 class App extends Component {
   constructor () {
@@ -13,8 +12,9 @@ class App extends Component {
       <HashRouter>
           <div className='frame'>
             <div className='canvas'>
-              <Route component={Home} path='/' exact></Route>
-              <Route component={Main} path="/game"></Route>
+              {
+                route.map((item,index) => <Route key={index} component={item.component} path={item.path} exact={item.exact ? true : null}></Route>)
+              }
             </div>
           </div>
       </HashRouter>
