@@ -1,7 +1,7 @@
 import React from 'react';
 import "./index.css"
 export default function Block(props) {
-    let {size,img,text} = props;
+    let {size,img,text,onClick} = props;
     let w,h;
     switch(size) {
         case 'small': {
@@ -21,7 +21,7 @@ export default function Block(props) {
         }
     }
     return (
-        <div className="block flex-center-center" style={{backgroundImage: `url(${img})`,width: w,height:h}}>
+        <div onClick={onClick} className="block flex-center-center" style={{backgroundImage: `url(${img})`,width: w,height:h}}>
             {text ? <div className="block-text">{text}</div> : null}
         </div>
     )

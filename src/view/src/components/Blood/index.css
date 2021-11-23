@@ -1,0 +1,26 @@
+.blood-container {
+    width: 300px;
+    height: 100px;
+}
+.blood-all {
+    width: 100%;
+    height: 60px;
+    margin: 10px;
+    background-color: #F5F7FA;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.blood-cur {
+    width: 100%;
+    height: 60px;
+    background-color: #5BE7C4;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.blood-info {
+    padding: 5px 10px;
+    width: 100%;
+    color: white;
+}

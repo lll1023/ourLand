@@ -1,0 +1,48 @@
+.sb-container {
+  position: absolute;
+  width: 800px;
+  height: 500px;
+  transform: translate(91px, 35px);
+  background-color: #3279ad;
+  z-index: 2;
+  transform-style: preserve-3d;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px #000;
+  animation: show 0.2s ease;
+}
+
+
+.sb-left {
+    height: 400px;
+    width: 45%;
+    overflow-y: auto;
+}
+
+
+
+.sb-right {
+    padding: 10px;
+    height: 400px;
+    width: 40%;
+    background-color: #d9e1e8;
+    border-radius: 5px;
+}
+
+.sb-title {
+    font-size: 2em;
+    font-weight: 600;
+}
+
+.sb-img >img {
+    height: 80px;
+}
+
+
+.sb-props {
+    width: 100%;
+}
+
+.sb-prop {
+    width: 40%;
+    text-align: center;
+}

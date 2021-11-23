@@ -34,6 +34,11 @@ body {
   border-radius: 5px;
 }
 
+
+.return:hover {
+  opacity: 0.6;
+}
+
 .flex-center-center {
   display: flex;
   justify-content: center;
@@ -61,6 +66,18 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+.flex-around-center-wrap {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.flex-center-center-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .flex-between-center {
