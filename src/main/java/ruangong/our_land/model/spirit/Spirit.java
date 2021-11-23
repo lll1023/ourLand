@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 精灵类，包括boss和野怪
+ * 精灵类，包括boss、用户初始和野怪
  *
  * @author HuangZhiquan
  * @author Wizardk
@@ -42,6 +42,15 @@ public abstract class Spirit {
     @NonNull
     @Getter
     private final String id;
+
+    /**
+     * 精灵是否稀有(是：1，否：0)
+     * 精灵稀有与否，关系到精灵捕捉时的成功率
+     */
+    @NonNull
+    @Getter
+    private int isRare;
+
     /**
      * 等级
      */
@@ -59,19 +68,29 @@ public abstract class Spirit {
      */
     @Getter
     @Min(value = 0)
-    private int attack;
+    private static int attack;
     /**
      * 防御力
      */
     @Getter
     @Min(value = 0)
-    private int defense;
+    private static int defence;
     /**
      * 速度
      */
     @Getter
     @Min(value = 0)
-    private int speed;
+    private static int speed;
+
+    /**
+     * 精灵类型（初始、野怪或boss）
+     */
+    private String type;
+
+    /**
+     * 精灵属性（水、火、草）
+     */
+    private String nature;
 
     /**
      * 存放精灵的4个技能
@@ -79,15 +98,19 @@ public abstract class Spirit {
     @NonNull
     private Map<String, Skill> skillMap;
 
+    //构造方法
     public Spirit(String name, String id, int level, int blood, int attack,
-                  int defense, int speed) {
+                  int defense, int speed,String type,String nature,int isRare) {
         this.name = name;
         this.id = id;
         this.level = level;
         this.blood = blood;
         this.attack = attack;
-        this.defense = defense;
+        this.defence = defense;
         this.speed = speed;
+        this.type = type;
+        this.nature = nature;
+        this.isRare = isRare;
         setSkills();
     }
 
@@ -103,7 +126,6 @@ public abstract class Spirit {
 
     /**
      * 初始化技能
-     *
      * @return 返回技能列表
      */
     protected abstract Skill[] initSkills();
@@ -112,7 +134,7 @@ public abstract class Spirit {
      * 根据技能名获取相应技能
      *
      * @param skillName 技能名
-     * @return 返回对应的技能名
+     * @return 返回对应的技能类对象
      */
     public Skill getSkills(String skillName) {
         String skill = ObjectHelper.requireNonNull(skillName, "skillName");
@@ -143,8 +165,8 @@ public abstract class Spirit {
         this.attack = ObjectHelper.verifyNonZeroPositive(attack, "attack");
     }
 
-    public void setDefense(int defense) {
-        this.defense = ObjectHelper.verifyNonZeroPositive(defense, "defense");
+    public void setDefence(int defense) {
+        this.defence = ObjectHelper.verifyNonZeroPositive(defense, "defense");
     }
 
     public void setSpeed(int speed) {
@@ -175,10 +197,56 @@ public abstract class Spirit {
         @Getter
         int times = 0;
 
-        //构造方法
-        public Skill(String name, String descrp) {
+        /**
+         * 技能类型（伤害型或提升型）
+         * 伤害型：基础伤害值
+         * 提升型：提升精灵属性（攻击、防御、速度）
+         */
+        @NonNull
+        @Getter
+        String type;
+
+        /**
+         * 技能伤害（若技能为伤害型），用于精灵对战
+         */
+        @Getter
+        int hurt;
+
+        //提升型技能的构造方法
+        public Skill(String name, String descrp,String type) {
             this.name = ObjectHelper.requireNonNull(name, "name");
             this.description = ObjectHelper.requireNonNull(descrp, "descrp");
+            this.type = ObjectHelper.requireNonNull(type, "type");
+        }
+
+        //伤害型技能的构造方法
+        public Skill(String name, String descrp,String type,int hurt) {
+            this.name = ObjectHelper.requireNonNull(name, "name");
+            this.description = ObjectHelper.requireNonNull(descrp, "descrp");
+            this.type = ObjectHelper.requireNonNull(type, "type");
+            this.hurt = hurt;
+        }
+
+        /**
+         * 技能效果：
+         * 伤害型：更新技能伤害值（用于对战）
+         * 提升型：更新精灵属性（仅限于对战）
+         */
+        public void skillEffect(){
+            if(this.type.equals("伤害型")){
+                //当前伤害值 = 伤害值 * 攻击力
+                this.hurt = this.hurt * attack;
+            }else if(this.type.equals("提升型")){
+                //通过判断技能描述，来判断是提升攻击力、防御力还是速度
+                //开始为简单起见，假设属性提升按+1的方式提升
+                if(this.description.contains("攻击力")){
+                    attack = attack + 1;
+                }else if(this.description.contains("防御力")){
+                    defence = defence + 1;
+                }else if(this.description.contains("速度")){
+                    speed = speed + 1;
+                }
+            }
         }
 
         public void setTimes(int times) {
