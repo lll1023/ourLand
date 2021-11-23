@@ -1,0 +1,17 @@
+.main-container {
+    width: 100%;
+    height: 100%;
+    background-image: url("../../assets/images/bg3.png");
+    background-size: cover;
+    animation: show 1s ease-in;
+}
+
+
+
+.main-header,.main-footer {
+    height: 100px;
+}
+.main-content {
+    width: 100%;
+    height: 300px;
+}

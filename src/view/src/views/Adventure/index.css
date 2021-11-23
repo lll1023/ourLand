@@ -1,0 +1,22 @@
+.adventure-container {
+    width: 100%;
+    height: 100%;
+    background-image: url("../../assets/images/icons/adventure.jpg");
+    background-size: cover;
+    animation: show 1s ease-in;
+}
+
+
+.adventure-content {
+    height: 90%;
+    display: grid;
+    place-content: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    justify-items: center;
+}
+
+.adv-item {
+    flex: 33%;
+}
+
