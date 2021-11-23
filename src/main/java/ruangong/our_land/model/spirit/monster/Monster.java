@@ -2,6 +2,8 @@ package ruangong.our_land.model.spirit.monster;
 
 import ruangong.our_land.model.spirit.Spirit;
 
+import java.util.Random;
+
 /**
  * 野怪类，野怪可捕捉
  * @author wizardk
@@ -34,6 +36,53 @@ public abstract class Monster extends Spirit {
      */
     public int getExp(){
         return EXP_CONSTANT;
+    }
+
+    /**
+     * 根据概率生成野怪（稀有野怪出现概率低，约为3%；普通野怪出现概率高，约为10%），用于精灵捕捉
+     * @return 野怪精灵的id
+     */
+    public int getMonster(){
+
+        //初始化野怪id数组
+        int[] monsterId = new int[100];
+        monsterId[0] = 4;
+        monsterId[1] = 5;
+        monsterId[2] = 6;
+        for (int i = 3; i < 13; i++) {
+            monsterId[i] = 7;
+        }
+        for (int i = 13; i < 23; i++) {
+            monsterId[i] = 8;
+        }
+        for (int i = 23; i <34; i++) {
+            monsterId[i] = 9;
+        }
+        for (int i = 34; i < 46; i++) {
+            monsterId[i] = 10;
+        }
+        for (int i = 46; i < 59; i++) {
+            monsterId[i] = 11;
+        }
+        for (int i = 59; i < 69; i++) {
+            monsterId[i] = 12;
+        }
+        for (int i = 69; i < 79; i++) {
+            monsterId[i] = 13;
+        }
+        for (int i = 79; i < 89; i++) {
+            monsterId[i] = 14;
+        }
+        for (int i = 89; i < 100; i++) {
+            monsterId[i] = 15;
+        }
+
+        //随机生成范围为[0,99]的数组下标
+        Random rand = new Random();
+        int randNumber =rand.nextInt(100);
+
+        //随机选择野怪id
+        return monsterId[randNumber];
     }
 
 }
