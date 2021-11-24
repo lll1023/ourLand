@@ -2,6 +2,8 @@ package ruangong.our_land.model.spirit.own;
 
 import ruangong.our_land.model.spirit.Spirit;
 
+import java.sql.*;
+
 /**
  * @Author:HuangZhiquan
  * @author:wizardk
@@ -73,5 +75,4 @@ public abstract class Own extends Spirit {
     public void updateSpirit() {
         this.blood = (int) (this.blood + ((this.level - 1) * 0.1));
     }
-
 }
