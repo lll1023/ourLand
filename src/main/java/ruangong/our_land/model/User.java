@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class User {
     private int id;
     private int progress; //进度
+    private int rank; //用户等级
     private String user_name;
     private String password;
     private String email;
