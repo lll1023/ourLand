@@ -2,6 +2,7 @@ package ruangong.our_land.model.spirit;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import ruangong.our_land.model.helper.ObjectHelper;
 import ruangong.our_land.model.spirit.monster.Monster;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Min;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * 精灵类，包括boss、用户初始和野怪
@@ -22,8 +24,8 @@ import java.util.Map;
  * @Modified By
  */
 @Data
+@Slf4j
 public abstract class Spirit {
-
     /**
      * 精灵的最高等级
      */
@@ -235,6 +237,7 @@ public abstract class Spirit {
          * 提升型：更新精灵属性（仅限于对战）
          */
         public void skillEffect() {
+            log.info("技能效果实现");
             if (this.type.equals("伤害型")) {
                 //当前伤害值 = 伤害值 * 攻击力
                 this.hurt = this.hurt * attack;
@@ -262,6 +265,7 @@ public abstract class Spirit {
          * @throws java.lang.ClassNotFoundException
          */
         public Connection getConnection() throws SQLException, java.lang.ClassNotFoundException {
+            log.info("连接数据库");
             String url = "jdbc:mysql://39.99.140.114:3306/our_land";
             Class.forName("com.mysql.cj.jdbc.Driver");
             String username = "root";
@@ -277,6 +281,7 @@ public abstract class Spirit {
          * @throws ClassNotFoundException
          */
         public String showAllSpirit() throws SQLException, ClassNotFoundException {
+            log.info("通过SQL查询语句，实现对数据库的查询，返回精灵图鉴信息");
             StringBuffer buffer = new StringBuffer();
             Connection con = getConnection();
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);

@@ -1,9 +1,10 @@
 package ruangong.our_land.model.spirit.monster;
 
 import ruangong.our_land.model.spirit.Spirit;
-
+import lombok.extern.slf4j.Slf4j;
 import java.util.Random;
 
+@Slf4j
 /**
  * 野怪类，野怪可捕捉
  * @author wizardk
@@ -43,7 +44,7 @@ public abstract class Monster extends Spirit {
      * @return 野怪精灵的id
      */
     public int getMonster(){
-
+        log.info("根据概率生成野怪");
         //初始化野怪id数组
         int[] monsterId = new int[100];
         monsterId[0] = 4;

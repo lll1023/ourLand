@@ -1,9 +1,9 @@
 package ruangong.our_land.model.spirit.own;
-
+import lombok.extern.slf4j.Slf4j;
 import ruangong.our_land.model.spirit.Spirit;
 
 import java.sql.*;
-
+@Slf4j
 /**
  * @Author:HuangZhiquan
  * @author:wizardk
@@ -45,6 +45,7 @@ public abstract class Own extends Spirit {
      * 有必要的等级判断
      */
     public void levelUP() {
+        log.info("精灵升级策略");
         if (this.level < MAX_LEVEL) {
             int upNum = exp / 100;
             if (this.level + upNum <= MAX_LEVEL) {
@@ -60,10 +61,10 @@ public abstract class Own extends Spirit {
 
     /**
      * 更新精灵经验累计值，用于更新等级
-     *
      * @param gain 击败野怪或boss后所获得的经验值
      */
     public void newExp(int gain) {
+        log.info("更新精灵经验累计值");
         this.exp = this.exp + gain;
     }
 
@@ -73,6 +74,7 @@ public abstract class Own extends Spirit {
      * 精灵血量与等级的关系：当前血量 = 原血量 + (当前等级-1)*0.1
      */
     public void updateSpirit() {
+        log.info("属性伴随等级提升而提升");
         this.blood = (int) (this.blood + ((this.level - 1) * 0.1));
     }
 }
