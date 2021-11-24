@@ -30,7 +30,17 @@ public class Prop {
                 this.capture_rate = (float) (2*capture_rate);
                 this.effect="40%的捕捉率";
             }
+        }else if(type==1){
+            this.prop_name="血包";
+            if(sub_type==0){
+                this.description="小药剂:加100血";
+                this.effect="blood+100";
+            }else if(sub_type==1){
+                this.description="大药剂:加1000血";
+                this.effect="blood+1000";
+            }
         }
+
 
     }
 
