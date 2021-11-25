@@ -231,7 +231,6 @@ public abstract class Spirit {
 
         /**
          * 连接数据库
-         *
          * @return Connection对象
          * @throws SQLException
          * @throws java.lang.ClassNotFoundException
