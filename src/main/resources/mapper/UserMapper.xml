@@ -4,4 +4,52 @@
 
 <mapper namespace="ruangong.our_land.mapper.UserMapper">
 
+    <resultMap id="userResultMap" type="ruangong.our_land.model.user.User">
+        <id property="id" column="u_id"/>
+        <result property="user_name" column="u_name"/>
+        <result property="password" column="u_pwd"/>
+        <result property="progress" column="u_progress"/>
+        <result property="exp" column="u_exp"/>
+    </resultMap>
+
+    <resultMap id="userPropResultMap" type="ruangong.our_land.model.user.UserProp">
+        <id property="u_id" column="u_id"/>
+        <result property="p_id" column="p_id"/>
+        <result property="p_num" column="p_num"/>
+    </resultMap>
+
+    <resultMap id="userSpiritMap" type="ruangong.our_land.model.user.UserSpirit">
+        <id property="u_id" column="u_id"/>
+        <result property="s_id" column="s_id"/>
+    </resultMap>
+
+
+    <select id="findByName" resultMap="userResultMap">
+        SELECT *
+        FROM user
+        WHERE u_name = #{uName}
+    </select>
+
+    <insert id="insertUser">
+        INSERT INTO user(u_name, u_pwd)
+        VALUES (#{uName}, #{uPwd})
+    </insert>
+
+    <select id="findProp" resultMap="userPropResultMap">
+        SELECT *
+        FROM user_prop
+        WHERE u_id = #{uId}
+    </select>
+
+    <select id="findSpirit" resultMap="userSpiritMap">
+        SELECT *
+        FROM user_spirit
+        WHERE u_id = #{uId}
+    </select>
+    
+    <insert id="insertUserSpirit">
+        INSERT INTO user_spirit(u_id, s_id)
+        VALUES (#{uId}, #{sId})
+    </insert>
+
 </mapper>

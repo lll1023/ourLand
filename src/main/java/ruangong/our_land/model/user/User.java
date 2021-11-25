@@ -1,9 +1,11 @@
-package ruangong.our_land.model;
+package ruangong.our_land.model.user;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
 /**
@@ -16,12 +18,20 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    private int id;
-    private int progress; //进度
-    private int rank; //用户等级
+
+    /** 用户id */
+    private Integer id;
+
+    /** 用户名 */
     private String user_name;
+
+    /** 用户密码 */
     private String password;
-    private String email;
-    private ArrayList<Integer> spirits_bag; //精灵背包
-    private ArrayList<Integer> props_bag; //道具背包
+
+    /** 游戏进度 */
+    private Integer progress;
+
+    /** 经验值 */
+    private Integer exp;
+
 }
