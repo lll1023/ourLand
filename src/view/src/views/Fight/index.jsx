@@ -3,6 +3,7 @@ import './index.css'
 import Blood from '../../components/Blood'
 import Button from '../../components/Button'
 import Block from '../../components/Block'
+import ReactAudioPlayer from 'react-audio-player'
 
 // 战斗界面
 
@@ -43,8 +44,12 @@ export default function Fight (props) {
   }
   return (
     <div className='f-container flex-between-center-col'>
+      <ReactAudioPlayer
+        autoPlay
+        src={require('../../assets/audios/adventure.mp3').default}
+      />
       <div className='f-blood flex-around-center'>
-        <Blood direction='left' rate='100' all='100' cur='60' />
+        <Blood name='烈焰星星' direction='left' rate='100' all='100' cur='60' />
         <svg
           t='1637586215597'
           viewBox='0 0 1024 1024'
@@ -60,7 +65,13 @@ export default function Fight (props) {
             fill='#ffffff'
           ></path>
         </svg>
-        <Blood direction='right' rate='100' all='100' cur='80' />
+        <Blood
+          direction='right'
+          name='烈焰星星'
+          rate='100'
+          all='100'
+          cur='80'
+        />
       </div>
       <div className='f-move flex-between-center'>
         <div className={myAttack ? 'my-attack' : myEnhance ? 'my-enhance' : ''}>
@@ -72,34 +83,12 @@ export default function Fight (props) {
         <div className={opAttack ? 'op-attack' : opEnhance ? 'op-enhance' : ''}>
           <img
             className='spirit s-right'
-            src={require('../../assets/images/spirit/2.png').default}
+            src={require('../../assets/images/spirit/21.png').default}
           />
         </div>
       </div>
       <div className='f-panel flex-between-center'>
         <div className='f-log'>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
-          <li>我方精灵使用了【火焰车】</li>
           <li>我方精灵使用了【火焰车】</li>
         </div>
         {Ptype ? (
