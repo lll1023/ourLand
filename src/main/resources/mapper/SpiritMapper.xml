@@ -1,0 +1,34 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ruangong.our_land.mapper.SpiritMapper">
+
+    <resultMap id="boss" type="ruangong.our_land.model.spirit.boss.Boss">
+        <id column="s_id" property="id"/>
+        <result column="s_name" property="name"/>
+        <result column="s_type" property="type"/>
+        <result column="s_rare" property="isRare"/>
+        <result column="s_blood" property="blood"/>
+        <result column="s_attack" property="attack"/>
+        <result column="s_defence" property="defence"/>
+        <result column="s_speed" property="speed"/>
+        <result column="s_prop" property="nature"/>
+    </resultMap>
+
+    <resultMap id="skill" type="ruangong.our_land.model.spirit.Spirit$Skill">
+        <id column="sk_id" property="id"/>
+        <result column="sk_name" property="name"/>
+        <result column="sk_intro" property="description"/>
+        <result column="sk_times" property="times"/>
+        <result column="sk_type" property="type"/>
+    </resultMap>
+
+    <select id="getSpirit" resultMap="boss">
+        select * from spirit where s_id=#{s_id};
+    </select>
+
+    <select id="getSkill" resultMap="skill">
+        select * from skill where sk_id in (#{skill1},#{skill2},#{skill3},#{skill4});
+    </select>
+</mapper>
