@@ -9,9 +9,18 @@
 
 
 .main-header,.main-footer {
+    padding: 0 10px;
     height: 100px;
 }
 .main-content {
     width: 100%;
     height: 300px;
+}
+
+.user-panel {
+    margin-right: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
 }

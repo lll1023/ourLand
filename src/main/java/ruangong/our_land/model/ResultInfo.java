@@ -1,10 +1,13 @@
 package ruangong.our_land.model;
 
+import lombok.Data;
+
 /**
  * @Author: Lsutin
  * @Date: 2021/11/1 11:25
  * @describe:
  */
+@Data
 public class ResultInfo {
     int status;
     String message;

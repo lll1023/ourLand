@@ -21,6 +21,7 @@ import java.util.Set;
  * @describe:
  */
 @RestControllerAdvice
+@Slf4j
 public class RestExceptionHandler {
 
     /**
@@ -33,8 +34,9 @@ public class RestExceptionHandler {
         HashMap<String, String> map = new HashMap<>();
         List<FieldError> fieldErrors = e.getFieldErrors();
         for (FieldError fieldError:fieldErrors){
-            map.put(fieldError.getField(),fieldError.getDefaultMessage());
+            map.put(fieldError.getField(),fieldError.getRejectedValue()+","+fieldError.getDefaultMessage());
         }
+        log.warn("参数错误：{}",map);
         return ResultInfo.error(map);
     }
 
@@ -49,8 +51,9 @@ public class RestExceptionHandler {
         HashMap<String, String> map = new HashMap<>();
         List<FieldError> fieldErrors = result.getFieldErrors();
         for (FieldError fieldError:fieldErrors){
-            map.put(fieldError.getField(),fieldError.getDefaultMessage());
+            map.put(fieldError.getField(),fieldError.getRejectedValue()+","+fieldError.getDefaultMessage());
         }
+        log.warn("参数错误：{}",map);
         return ResultInfo.error(map);
     }
 
@@ -67,6 +70,7 @@ public class RestExceptionHandler {
             String path = violation.getPropertyPath().toString();
             map.put(path.substring(path.lastIndexOf(".")+1),violation.getMessage());
         }
+        log.warn("参数错误：{}",map);
         return ResultInfo.error(map);
     }
 

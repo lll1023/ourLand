@@ -1,6 +1,7 @@
 import Home from "../views/Home/index";
 import Main from "../views/Main";
 import Adventure from "../views/Adventure";
+import Fight from "../views/Fight"
 
 // 存放路由配置信息
 export const route = [
@@ -16,5 +17,9 @@ export const route = [
   {
     path: "/adventure",
     component: Adventure
+  },
+  {
+    path: "/fight",
+    component: Fight
   }
 ];

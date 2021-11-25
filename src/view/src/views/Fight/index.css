@@ -1,0 +1,169 @@
+.f-container {
+  width: 100%;
+  height: 100%;
+  background-image: url("../../assets/images/fight.jpg");
+  background-size: cover;
+}
+
+.border {
+  border: 1px red solid;
+}
+
+.f-blood {
+  width: 100%;
+  height: 100px;
+}
+
+.f-move {
+  width: 100%;
+  height: 250px;
+  padding: 0 50px;
+}
+
+.spirit {
+  height: 250px;
+  -webkit-user-drag: none;
+  user-select: none;
+  z-index: 1;
+}
+
+
+
+.my-attack::after {
+  content: "";
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  border: 5px solid white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #5be7c4;
+  animation: leftToRight 2s ease-in;
+}
+
+@keyframes leftToRight {
+  from {
+    transform: translateX(0px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(500px);
+    opacity: 1;
+  }
+}
+.op-attack::before {
+  content: "";
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  border: 5px solid white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #5be7c4;
+  animation: rightToLeft 2s ease-in;
+}
+
+@keyframes rightToLeft {
+  from {
+    transform: translateX(0px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-500px);
+    opacity: 1;
+  }
+}
+
+.my-enhance {
+  animation: enhance 2s ease;
+}
+
+.op-enhance {
+  animation: enhance 2s ease;
+}
+
+@keyframes enhance {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5)
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.f-panel {
+  width: 100%;
+  height: 200px;
+  background-color: rgba(0, 0, 161, 0.4);
+  border-top: 5px solid #39bae8;
+}
+
+.f-left {
+  padding: 10px 100px;
+  height: 100%;
+  width: 50%;
+  overflow-y: auto;
+}
+.f-right {
+  height: 100%;
+  width: 30%;
+  background-color: rgba(185, 237, 248, 0.7);
+}
+
+.s-left {
+  animation: upAnddown 2s ease infinite;
+}
+
+.s-right {
+  animation: upAnddown2 2s ease infinite;
+}
+
+
+@keyframes upAnddown {
+  0% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes upAnddown2 {
+  0% {
+    transform: translateY(-5px)  scaleX(-1);
+  }
+  50% {
+    transform: translateY(5px) scaleX(-1);
+  }
+  100% {
+    transform: translateY(-5px) scaleX(-1);
+  }
+}
+
+
+.f-log {
+  width: 25%;
+  height: 100%;
+  overflow-y: auto;
+  color: white;
+  font-size: 12px;
+  border-right: #39bae8 5px solid;
+  padding: 10px;
+}
+
+
+.p-mask {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+}

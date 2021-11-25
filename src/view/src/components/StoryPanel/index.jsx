@@ -1,10 +1,12 @@
 import React from 'react';
-import "./index.css"
+import "./index.css";
+import Button from "../Button"
 
 function StoryPanel(props) {
+    let {close} = props;
     return (
         <div className="sp-container flex-start-stretch-col">
-            <div className="sp-header flex-end-center" >
+            <div className="sp-header flex-end-center" onClick={close} >
                 X
             </div>
             <div className="sp-content flex-center-center">
@@ -14,7 +16,7 @@ function StoryPanel(props) {
                 <div className="sp-right flex-between-center-col">
                     <div className="sp-title">森林污染</div>
                     <div className="sp-story">森林幻想神，是地球森林的守护者，因人类的过度砍伐，导致全世界的森林面积急剧减少，居住在森林中的动物们都无家可归，逐渐灭迹，因此，森林守护神出现了。</div>
-                    <button>开始挑战</button>
+                    <Button size="small">开始挑战</Button>
                 </div>
             </div>
         </div>
