@@ -1,7 +1,9 @@
 package ruangong.our_land.model.spirit;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import ruangong.our_land.model.helper.ObjectHelper;
@@ -10,8 +12,7 @@ import ruangong.our_land.model.spirit.monster.Monster;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -25,66 +26,55 @@ import java.util.Map;
  */
 @Data
 @Slf4j
+@NoArgsConstructor
 public abstract class Spirit {
+
     /**
      * 精灵的最高等级
      */
     @Max(value = 100, message = "等级最高为100")
     public static final int MAX_LEVEL = 100;
-
-    /**
-     * 精灵名
-     */
-    @NonNull
-    @Getter
-    private final String name;
-
-    /**
-     * 精灵的id
-     */
-    @NonNull
-    @Getter
-    private final String id;
-
-    /**
-     * 精灵是否稀有(是：1，否：0)
-     * 精灵稀有与否，关系到精灵捕捉时的成功率
-     */
-    @NonNull
-    @Getter
-    private int isRare;
-
-    /**
-     * 等级
-     */
-    @Getter
-    @Min(value = 1, message = "等级最低为1")
-    private int level;
-    /**
-     * 血量
-     */
-    @Getter
-    @Min(value = 0)
-    private int blood;
     /**
      * 攻击力
      */
-    @Getter
     @Min(value = 0)
     private static int attack;
     /**
      * 防御力
      */
-    @Getter
     @Min(value = 0)
     private static int defence;
     /**
      * 速度
      */
-    @Getter
     @Min(value = 0)
     private static int speed;
-
+    /**
+     * 精灵名
+     */
+    @NonNull
+    private String name;
+    /**
+     * 精灵的id
+     */
+    @NonNull
+    private String id;
+    /**
+     * 精灵是否稀有(是：1，否：0)
+     * 精灵稀有与否，关系到精灵捕捉时的成功率
+     */
+    @NonNull
+    private int isRare;
+    /**
+     * 等级
+     */
+    @Min(value = 1, message = "等级最低为1")
+    private int level;
+    /**
+     * 血量
+     */
+    @Min(value = 0)
+    private int blood;
     /**
      * 精灵类型（初始、野怪或boss）
      */
@@ -95,37 +85,20 @@ public abstract class Spirit {
      */
     private String nature;
 
+    @JsonIgnore
+    private int skill1;
+    @JsonIgnore
+    private int skill2;
+    @JsonIgnore
+    private int skill3;
+    @JsonIgnore
+    private int skill4;
+
     /**
      * 存放精灵的4个技能
      */
     @NonNull
-    private Map<String, Skill> skillMap;
-
-    //构造方法
-    public Spirit(String name, String id, int level, int blood, int attack,
-                  int defense, int speed, String type, String nature, int isRare) {
-        this.name = name;
-        this.id = id;
-        this.level = level;
-        this.blood = blood;
-        this.attack = attack;
-        this.defence = defense;
-        this.speed = speed;
-        this.type = type;
-        this.nature = nature;
-        this.isRare = isRare;
-        setSkills();
-    }
-
-    private void setSkills() {
-        if (skillMap == null) {
-            Skill[] skills = ObjectHelper.requireNonNull(initSkills());
-            this.skillMap = new HashMap<>(4);
-            for (Skill skill : skills) {
-                skillMap.put(skill.name, skill);
-            }
-        }
-    }
+    private List<Skill> skills;
 
     /**
      * 初始化技能
@@ -134,13 +107,10 @@ public abstract class Spirit {
      */
     protected abstract Skill[] initSkills();
 
-    /**
-     * 根据技能名获取相应技能
-     *
-     * @param skillName 技能名
-     * @return 返回对应的技能类对象
-     */
-    public Skill getSkills(String skillName) {
+
+
+    @Deprecated
+    /*public Skill getSkills(String skillName) {
         String skill = ObjectHelper.requireNonNull(skillName, "skillName");
         if (skillMap == null) {
             return null;
@@ -149,7 +119,8 @@ public abstract class Spirit {
             throw new IllegalArgumentException("The skill \" " + skill + " \" not found! Please recheck!");
         }
         return skillMap.get(skill);
-    }
+    }*/
+
 
 
     /**
@@ -260,6 +231,7 @@ public abstract class Spirit {
 
         /**
          * 连接数据库
+         *
          * @return Connection对象
          * @throws SQLException
          * @throws java.lang.ClassNotFoundException
@@ -276,6 +248,7 @@ public abstract class Spirit {
 
         /**
          * 展示精灵图鉴
+         *
          * @return 精灵图鉴信息
          * @throws SQLException
          * @throws ClassNotFoundException

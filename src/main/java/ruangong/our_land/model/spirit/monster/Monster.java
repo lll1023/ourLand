@@ -11,7 +11,7 @@ import java.util.Random;
  * @author HuangZhiquan
  * @email ozx1341530199@gmail.com
  */
-public abstract class Monster extends Spirit {
+public class Monster extends Spirit {
     /**
      * 野怪的初始等级，默认为1
      */
@@ -21,15 +21,18 @@ public abstract class Monster extends Spirit {
      */
     protected static final int EXP_CONSTANT = 100;
 
-    public Monster(String name, String id, int level, int blood, int attack, int defense, int speed,String type,String nature,int isRare) {
-        super(name, id, level, blood, attack, defense, speed,type,nature,isRare);
+    @Override
+    protected Skill[] initSkills() {
+        return new Skill[0];
     }
 
     /**
      * 获取经验值，即精灵经验值在原本的基础上加gained
      * @param gained 获取到的经验值
      */
-    public abstract void gainExp(int gained);
+    public void gainExp(int gained) {
+
+    }
 
     /**
      * 当野怪被击败后，给予用户精灵经验
@@ -43,7 +46,7 @@ public abstract class Monster extends Spirit {
      * 根据概率生成野怪（稀有野怪出现概率低，约为3%；普通野怪出现概率高，约为10%），用于精灵捕捉
      * @return 野怪精灵的id
      */
-    public int getMonster(){
+    public static int getMonster(){
         log.info("根据概率生成野怪");
         //初始化野怪id数组
         int[] monsterId = new int[100];
