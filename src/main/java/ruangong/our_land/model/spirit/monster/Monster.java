@@ -1,7 +1,8 @@
 package ruangong.our_land.model.spirit.monster;
 
-import ruangong.our_land.model.spirit.Spirit;
 import lombok.extern.slf4j.Slf4j;
+import ruangong.our_land.model.spirit.Spirit;
+
 import java.util.Random;
 
 @Slf4j
@@ -21,32 +22,12 @@ public class Monster extends Spirit {
      */
     protected static final int EXP_CONSTANT = 100;
 
-    @Override
-    protected Skill[] initSkills() {
-        return new Skill[0];
-    }
-
-    /**
-     * 获取经验值，即精灵经验值在原本的基础上加gained
-     * @param gained 获取到的经验值
-     */
-    public void gainExp(int gained) {
-
-    }
-
-    /**
-     * 当野怪被击败后，给予用户精灵经验
-     * @return 经验值
-     */
-    public int getExp(){
-        return EXP_CONSTANT;
-    }
-
     /**
      * 根据概率生成野怪（稀有野怪出现概率低，约为3%；普通野怪出现概率高，约为10%），用于精灵捕捉
+     *
      * @return 野怪精灵的id
      */
-    public static int getMonster(){
+    public static int getMonster() {
         log.info("根据概率生成野怪");
         //初始化野怪id数组
         int[] monsterId = new int[100];
@@ -59,7 +40,7 @@ public class Monster extends Spirit {
         for (int i = 13; i < 23; i++) {
             monsterId[i] = 8;
         }
-        for (int i = 23; i <34; i++) {
+        for (int i = 23; i < 34; i++) {
             monsterId[i] = 9;
         }
         for (int i = 34; i < 46; i++) {
@@ -83,10 +64,28 @@ public class Monster extends Spirit {
 
         //随机生成范围为[0,99]的数组下标
         Random rand = new Random();
-        int randNumber =rand.nextInt(100);
+        int randNumber = rand.nextInt(100);
 
         //随机选择野怪id
         return monsterId[randNumber];
+    }
+
+    /**
+     * 获取经验值，即精灵经验值在原本的基础上加gained
+     *
+     * @param gained 获取到的经验值
+     */
+    public void gainExp(int gained) {
+
+    }
+
+    /**
+     * 当野怪被击败后，给予用户精灵经验
+     *
+     * @return 经验值
+     */
+    public int getExp() {
+        return EXP_CONSTANT;
     }
 
 }
