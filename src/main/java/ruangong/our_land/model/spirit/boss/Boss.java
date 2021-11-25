@@ -16,11 +16,6 @@ public class Boss extends Spirit {
      */
     protected static final int EXP_BOSS = 1000;
 
-    @Override
-    protected Skill[] initSkills() {
-        return new Skill[0];
-    }
-
     /**
      * 当boss被击败后，给予用户精灵经验
      * @return 经验值
