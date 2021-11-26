@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
+import ruangong.our_land.mapper.SpiritMapper;
 import ruangong.our_land.model.helper.ObjectHelper;
 
 import javax.validation.constraints.Max;
@@ -58,8 +59,8 @@ public abstract class Spirit {
     /**
      * 精灵的id
      */
-    @NonNull
-    private String id;
+    @Min(value = 1,message = "精灵id最小为1")
+    private int id;
     /**
      * 精灵是否稀有(是：1，否：0)
      * 精灵稀有与否，关系到精灵捕捉时的成功率
@@ -69,7 +70,6 @@ public abstract class Spirit {
     /**
      * 等级
      */
-    @Min(value = 1, message = "等级最低为1")
     private int level;
     /**
      * 血量
@@ -104,8 +104,9 @@ public abstract class Spirit {
     /**
      * 初始化技能
      */
-    protected void initSkills() {
+    public void initSkills(SpiritMapper mapper) {
         //调用SpiritMapper中的getskill获取skill信息，然后赋值给skill1-4
+        skills=mapper.getSkill(skill1,skill2,skill3,skill4);
     }
 
     /**
@@ -179,6 +180,8 @@ public abstract class Spirit {
          * 技能伤害（若技能为伤害型），用于精灵对战
          */
         int hurt;
+
+        private int id;
 
         public void setTimes(int times) {
             this.times = ObjectHelper.verifyNonZeroPositive(times, "times");

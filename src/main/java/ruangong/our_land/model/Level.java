@@ -23,6 +23,4 @@ public class Level {
 
     @Size(max = 255,message = "长度不能超过255")
     private String l_story;
-
-    private Boss boss;
 }
