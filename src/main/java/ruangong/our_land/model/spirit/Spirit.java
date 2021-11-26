@@ -104,53 +104,8 @@ public abstract class Spirit {
     /**
      * 初始化技能
      */
-    protected abstract Skill[] initSkills();
-
-
-    @Deprecated
-    /*public Skill getSkills(String skillName) {
-        String skill = ObjectHelper.requireNonNull(skillName, "skillName");
-        if (skillMap == null) {
-            return null;
-        }
-        if (!skillMap.containsKey(skill)) {
-            throw new IllegalArgumentException("The skill \" " + skill + " \" not found! Please recheck!");
-        }
-        return skillMap.get(skill);
-    }*/
-
-
-    public void setBlood(int blood) {
-        this.blood = ObjectHelper.verifyNonZeroPositive(blood, "blood");
-    }
-
-    public void setAttack(int attack) {
-        this.attack = ObjectHelper.verifyNonZeroPositive(attack, "attack");
-    }
-
-    public void setDefence(int defense) {
-        this.defence = ObjectHelper.verifyNonZeroPositive(defense, "defense");
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = ObjectHelper.verifyNonZeroPositive(speed, "speed");
-    }
-
-    /**
-     * 连接数据库
-     *
-     * @return Connection对象
-     * @throws SQLException
-     * @throws java.lang.ClassNotFoundException
-     */
-    public Connection getConnection() throws SQLException, java.lang.ClassNotFoundException {
-        log.info("连接数据库");
-        String url = "jdbc:mysql://39.99.140.114:3306/our_land";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        String username = "root";
-        String password = "whibin";
-        Connection con = DriverManager.getConnection(url, username, password);
-        return con;
+    protected void initSkills() {
+        //调用SpiritMapper中的getskill获取skill信息，然后赋值给skill1-4
     }
 
     /**
