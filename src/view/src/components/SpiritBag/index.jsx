@@ -2,12 +2,18 @@ import React, { useState } from 'react'
 import './index.css'
 import Block from '../Block';
 import Button from "../Button"
+import spiritsImg from "../../data/spiritsImg"
 
 export default function SpiritBag (props) {
   const { onClick } = props;
-  const [selected,setSelect] = useState(require("../../assets/images/spirit/2.png").default);
-  function switchSpirit(img) {
+  const [selected,setSelect] = useState(spiritsImg[1]);
+  const [sp_info,setInfo] = useState();
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  console.log(userInfo);
+  const spirits = userInfo.spirits_bag;
+  function switchSpirit(img,id) {
     setSelect(img);
+
   }
   return (
     <div className='sb-container flex-start-stretch-col'>
@@ -16,20 +22,11 @@ export default function SpiritBag (props) {
       </div>
       <div className='flex-around-center'>
         <div className='sb-left flex-around-center-wrap'>
-          <Block onClick={switchSpirit.bind(this,require("../../assets/images/spirit/2.png").default)} text='' img={require("../../assets/images/spirit/2.png").default} size='medium'></Block>
-          <Block onClick={switchSpirit.bind(this,require("../../assets/images/spirit/1.png").default)} text='' img={require("../../assets/images/spirit/1.png").default} size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
-          <Block text='' size='medium'></Block>
+          {
+            spirits.map((item) => {
+                return <Block key={item} onClick={switchSpirit.bind(this,spiritsImg[item],item)} text='' img={spiritsImg[item]} size='medium'></Block>
+            })
+          }
         </div>
         <div className='sb-right flex-between-center-col'>
           <div className='sb-title'>精灵名称</div>

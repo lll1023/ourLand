@@ -4,6 +4,9 @@ import Blood from '../../components/Blood'
 import Button from '../../components/Button'
 import Block from '../../components/Block'
 import ReactAudioPlayer from 'react-audio-player'
+import propsImg from "../../data/propsImg";
+import propsInfo from "../../data/propsInfo"
+import { navigate } from '../../utils/utils'
 
 // 战斗界面
 
@@ -19,6 +22,12 @@ export default function Fight (props) {
   let [myEnhance, setMyEnhance] = useState(false)
   let [opEnhance, setOpEnhance] = useState(false)
 
+
+  // 道具数量
+  let [isBloodUsed,setBloodUsed] = useState(false);
+  let [isBallUsed,setBallUsed] = useState(false);
+  let [isPPUsed,setPPUsed] = useState(false);
+
   // 播放战斗动画
   function switchStatus (func, func2) {
     setMask(true)
@@ -32,21 +41,12 @@ export default function Fight (props) {
       }, 2000)
     }, 2000)
   }
-
-  // 返回
-  function backTo () {
-    let res = window.confirm('确定要逃跑吗？')
-    if (res) {
-      props.history.push({
-        pathname: '/game'
-      })
-    }
-  }
   return (
     <div className='f-container flex-between-center-col'>
       <ReactAudioPlayer
         autoPlay
         src={require('../../assets/audios/adventure.mp3').default}
+        loop
       />
       <div className='f-blood flex-around-center'>
         <Blood name='烈焰星星' direction='left' rate='100' all='100' cur='60' />
@@ -77,11 +77,13 @@ export default function Fight (props) {
         <div className={myAttack ? 'my-attack' : myEnhance ? 'my-enhance' : ''}>
           <img
             className='spirit s-left'
+            alt=""
             src={require('../../assets/images/spirit/1.png').default}
           />
         </div>
         <div className={opAttack ? 'op-attack' : opEnhance ? 'op-enhance' : ''}>
           <img
+          alt=""
             className='spirit s-right'
             src={require('../../assets/images/spirit/21.png').default}
           />
@@ -120,12 +122,9 @@ export default function Fight (props) {
         ) : (
           // 道具界面
           <div className='f-left flex-around-center-wrap'>
-            <Block text='1' size='small'></Block>
-            <Block text='1' size='small'></Block>
-            <Block text='1' size='small'></Block>
-            <Block text='1' size='small'></Block>
-            <Block text='1' size='small'></Block>
-            <Block text='1' size='small'></Block>
+            <Block onClick={switchStatus.bind(this,setBallUsed,setOpAttack)} pop={true} poptip={propsInfo[0].intro} text={isBallUsed ? "0" : "1"} img={propsImg[0]} size='small'></Block>
+            <Block onClick={switchStatus.bind(this,setBloodUsed,setOpAttack)} pop={true} poptip={propsInfo[1].intro} text={isBloodUsed ? "0" : "1"} img={propsImg[1]} size='small'></Block>
+            <Block onClick={switchStatus.bind(this,setPPUsed,setOpAttack)} pop={true} poptip={propsInfo[2].intro} text={isPPUsed ? "0" : "1"} img={propsImg[2]} size='small'></Block>
           </div>
         )}
 
@@ -136,7 +135,7 @@ export default function Fight (props) {
           <Button size='small' onClick={setType.bind(this, false)}>
             道具
           </Button>
-          <Button size='small' onClick={backTo}>
+          <Button size='small' onClick={navigate.bind(this,props.history,'确定要逃跑吗？','/game')}>
             逃跑
           </Button>
         </div>

@@ -22,7 +22,7 @@ function Home () {
         <Button onClick={() => setClick(!isClick)}>
           <a>进入游戏</a>
         </Button>
-        <ReactAudioPlayer src={require("../../assets/audios/login.mp3").default} autoPlay/>
+        <ReactAudioPlayer src={require("../../assets/audios/login.mp3").default} autoPlay loop/>
       </div>
     )
   }
