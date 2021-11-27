@@ -1,12 +1,13 @@
 package ruangong.our_land.service.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ruangong.our_land.mapper.LevelMapper;
 import ruangong.our_land.mapper.SpiritMapper;
 import ruangong.our_land.model.Level;
 import ruangong.our_land.model.spirit.boss.Boss;
 import ruangong.our_land.service.MapService;
+
+import javax.annotation.Resource;
 
 /**
  * @Author: Lsutin
@@ -15,17 +16,23 @@ import ruangong.our_land.service.MapService;
  */
 @Service
 public class MapServiceImpl implements MapService {
-    @Autowired
+    @Resource
     private LevelMapper levelMapper;
-    @Autowired
+    @Resource
     private SpiritMapper spiritMapper;
 
     @Override
     public Level getLevel(Level level) {
         level=levelMapper.getLevel(level.getL_id());
-        Boss boss = spiritMapper.getSpirit(level.getL_boss());
-
-        level.setBoss(boss);
         return level;
+    }
+
+    @Override
+    public Boss getSpirit(Boss boss) {
+        boss = spiritMapper.getSpirit(boss.getId());
+        if (null!=boss){
+            boss.initSkills(spiritMapper);
+        }
+        return boss;
     }
 }

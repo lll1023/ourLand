@@ -39,6 +39,10 @@ public class Prop {
                 this.description="大药剂:加1000血";
                 this.effect="blood+1000";
             }
+        }else if(type==2) {
+            this.prop_name = "pp";
+            this.description="限定道具:刷新技能次数";
+            this.effect="times=5";  //技能次数变为初始值
         }
 
 

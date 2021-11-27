@@ -22,9 +22,6 @@ public class UserDto {
     /** 用户名 */
     private String user_name;
 
-    /** 用户密码 */
-    private String password;
-
     /** 游戏进度 */
     private Integer progress;
 

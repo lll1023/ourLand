@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
+import ruangong.our_land.mapper.SpiritMapper;
 import ruangong.our_land.model.helper.ObjectHelper;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -35,6 +33,10 @@ public abstract class Spirit {
     @Max(value = 100, message = "等级最高为100")
     public static final int MAX_LEVEL = 100;
     /**
+     * 最大经验值
+     */
+    private static final int MAX_EXP = 10000;
+    /**
      * 攻击力
      */
     @Min(value = 0)
@@ -57,8 +59,8 @@ public abstract class Spirit {
     /**
      * 精灵的id
      */
-    @NonNull
-    private String id;
+    @Min(value = 1,message = "精灵id最小为1")
+    private int id;
     /**
      * 精灵是否稀有(是：1，否：0)
      * 精灵稀有与否，关系到精灵捕捉时的成功率
@@ -68,7 +70,6 @@ public abstract class Spirit {
     /**
      * 等级
      */
-    @Min(value = 1, message = "等级最低为1")
     private int level;
     /**
      * 血量
@@ -102,35 +103,21 @@ public abstract class Spirit {
 
     /**
      * 初始化技能
-     *
-     * @return 返回技能列表
      */
-    protected abstract Skill[] initSkills();
-
-    public void setBlood(int blood) {
-        this.blood = ObjectHelper.verifyNonZeroPositive(blood, "blood");
-    }
-
-    public void setAttack(int attack) {
-        this.attack = ObjectHelper.verifyNonZeroPositive(attack, "attack");
-    }
-
-    public void setDefence(int defense) {
-        this.defence = ObjectHelper.verifyNonZeroPositive(defense, "defense");
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = ObjectHelper.verifyNonZeroPositive(speed, "speed");
+    public void initSkills(SpiritMapper mapper) {
+        //调用SpiritMapper中的getskill获取skill信息，然后赋值给skill1-4
+        skills=mapper.getSkill(skill1,skill2,skill3,skill4);
     }
 
     /**
      * 根据用户经验值获取当前精灵等级
+     *
      * @param exp 用户经验值
      * @return 精灵当前等级
      */
     public int getLevel(int exp) {
         int level;
-        if (exp >= 10000) {
+        if (exp >= MAX_EXP) {
             level = MAX_LEVEL;
         } else {
             level = exp / 100;
@@ -140,8 +127,9 @@ public abstract class Spirit {
 
     /**
      * 获取当前精灵血量
+     *
      * @param blood 精灵原血量
-     * @param exp 用户经验值
+     * @param exp   用户经验值
      * @return 当前精灵血量
      */
     public int getBlood(int blood, int exp) {
@@ -151,9 +139,18 @@ public abstract class Spirit {
     }
 
     /**
+     * 使用技能后修改相应的属性
+     *
+     * @param skill 被使用的技能
+     */
+    public void useSkill(Skill skill) {
+    }
+
+    /**
      * 技能类
      */
     @Data
+    @NoArgsConstructor
     public static class Skill {
         //技能基本属性
         /**
@@ -177,30 +174,14 @@ public abstract class Spirit {
          * 提升型：提升精灵属性（攻击、防御、速度）
          */
         @NonNull
-
         String type;
 
         /**
          * 技能伤害（若技能为伤害型），用于精灵对战
          */
-
         int hurt;
 
-        //提升型技能的构造方法
-        public Skill(String name, String descrp, String type) {
-            this.name = ObjectHelper.requireNonNull(name, "name");
-            this.description = ObjectHelper.requireNonNull(descrp, "descrp");
-            this.type = ObjectHelper.requireNonNull(type, "type");
-        }
-
-        //伤害型技能的构造方法
-        public Skill(String name, String descrp, String type, int hurt) {
-            this.name = ObjectHelper.requireNonNull(name, "name");
-            this.description = ObjectHelper.requireNonNull(descrp, "descrp");
-            this.type = ObjectHelper.requireNonNull(type, "type");
-            this.hurt = hurt;
-        }
-
+        private int id;
 
         public void setTimes(int times) {
             this.times = ObjectHelper.verifyNonZeroPositive(times, "times");

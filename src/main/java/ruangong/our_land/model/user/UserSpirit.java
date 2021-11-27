@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 用户-精灵类
  * @Author hwy
@@ -16,9 +18,11 @@ import lombok.NoArgsConstructor;
 public class UserSpirit {
 
     /** 用户id */
+    @NotNull
     private Integer u_id;
 
     /** 精灵id */
+    @NotNull
     private Integer s_id;
 
 }

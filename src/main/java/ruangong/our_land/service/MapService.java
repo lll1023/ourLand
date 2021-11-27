@@ -1,6 +1,7 @@
 package ruangong.our_land.service;
 
 import ruangong.our_land.model.Level;
+import ruangong.our_land.model.spirit.boss.Boss;
 
 /**
  * @Author: Lsutin
@@ -9,4 +10,6 @@ import ruangong.our_land.model.Level;
  */
 public interface MapService {
     Level getLevel(Level level);
+
+    Boss getSpirit(Boss boss);
 }

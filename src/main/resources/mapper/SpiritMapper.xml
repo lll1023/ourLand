@@ -16,6 +16,18 @@
         <result column="s_prop" property="nature"/>
     </resultMap>
 
+    <resultMap id="monster" type="ruangong.our_land.model.spirit.monster.Monster">
+        <id column="s_id" property="id"/>
+        <result column="s_name" property="name"/>
+        <result column="s_type" property="type"/>
+        <result column="s_rare" property="isRare"/>
+        <result column="s_blood" property="blood"/>
+        <result column="s_attack" property="attack"/>
+        <result column="s_defence" property="defence"/>
+        <result column="s_speed" property="speed"/>
+        <result column="s_prop" property="nature"/>
+    </resultMap>
+
     <resultMap id="skill" type="ruangong.our_land.model.spirit.Spirit$Skill">
         <id column="sk_id" property="id"/>
         <result column="sk_name" property="name"/>
@@ -25,6 +37,10 @@
     </resultMap>
 
     <select id="getSpirit" resultMap="boss">
+        select * from spirit where s_id=#{s_id};
+    </select>
+
+    <select id="getMonster" resultMap="monster">
         select * from spirit where s_id=#{s_id};
     </select>
 

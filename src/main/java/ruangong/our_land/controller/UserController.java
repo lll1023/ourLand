@@ -11,6 +11,7 @@ import ruangong.our_land.model.user.UserSpirit;
 import ruangong.our_land.service.UserService;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 /**
@@ -36,8 +37,8 @@ public class UserController {
      */
     @PostMapping("/register")
     @WebLog(message = "用户注册")
-    public ResultInfo register(@RequestParam("username") String uName,
-                               @RequestParam("password") String uPwd){
+    public ResultInfo register(@RequestParam("username") @Valid String uName,
+                               @RequestParam("password") @Valid String uPwd){
         User user;
         user = userService.findByName(uName);
         if (user != null){
@@ -64,8 +65,8 @@ public class UserController {
      */
     @PostMapping("/login")
     @WebLog(message = "用户登录")
-    public ResultInfo login(@RequestParam("username") String uName,
-                            @RequestParam("password") String uPwd){
+    public ResultInfo login(@RequestParam("username") @Valid String uName,
+                            @RequestParam("password") @Valid String uPwd){
         User user = userService.findByName(uName);
         if (user == null){
             return ResultInfo.error(500,"登录失败:该用户不存在");
