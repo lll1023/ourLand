@@ -17,6 +17,7 @@
     background-color: #5BE7C4;
     border-radius: 5px;
     overflow: hidden;
+    transition: 1s ease-out;
 }
 
 .blood-info {

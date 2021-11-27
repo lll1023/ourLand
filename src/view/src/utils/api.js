@@ -20,6 +20,14 @@ export const User = {
 // 精灵模块
 export const Spirit = {
     getSpiritById : function(data) {
-        return Request.post("/")
+        return Request.post("/map/getSpirit",data);
+    }
+}
+
+
+// 战斗模块
+export const Fight = {
+    getFightInfo : function(data) {
+        return Request.post("/spirit/getInfo",data);
     }
 }

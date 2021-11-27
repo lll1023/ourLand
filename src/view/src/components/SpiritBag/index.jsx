@@ -4,16 +4,28 @@ import Block from '../Block';
 import Button from "../Button"
 import spiritsImg from "../../data/spiritsImg"
 
+import {Spirit} from "../../utils/api"
+import { message } from 'antd';
+
 export default function SpiritBag (props) {
   const { onClick } = props;
   const [selected,setSelect] = useState(spiritsImg[1]);
-  const [sp_info,setInfo] = useState();
+  const [sp_info,setInfo] = useState({});
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   console.log(userInfo);
   const spirits = userInfo.spirits_bag;
   function switchSpirit(img,id) {
     setSelect(img);
-
+    let data = new FormData();
+    data.append("id",id);
+    Spirit.getSpiritById(data).then(res => {
+      if(res.data.status == 200) {
+        let info = res.data;
+        setInfo(info.data);
+      }else {
+        message.error(res.data.message);
+      }
+    })
   }
   return (
     <div className='sb-container flex-start-stretch-col'>
@@ -29,7 +41,7 @@ export default function SpiritBag (props) {
           }
         </div>
         <div className='sb-right flex-between-center-col'>
-          <div className='sb-title'>精灵名称</div>
+          <div className='sb-title'>{sp_info.name}</div>
           <div className='sb-img'>
             <img src={selected} alt="" />
           </div>

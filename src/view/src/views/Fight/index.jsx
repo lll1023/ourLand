@@ -4,13 +4,17 @@ import Blood from '../../components/Blood'
 import Button from '../../components/Button'
 import Block from '../../components/Block'
 import ReactAudioPlayer from 'react-audio-player'
-import propsImg from "../../data/propsImg";
-import propsInfo from "../../data/propsInfo"
+import propsImg from '../../data/propsImg'
+import propsInfo from '../../data/propsInfo'
+import spiritsImg from '../../data/spiritsImg'
 import { navigate } from '../../utils/utils'
 
 // 战斗界面
 
 export default function Fight (props) {
+  const opponent = JSON.parse(localStorage.getItem('opponent'))
+  const mySpirit = JSON.parse(localStorage.getItem('mySpirit'))
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   // 是否遮罩
   let [isMask, setMask] = useState(false)
   // 面板类型
@@ -22,25 +26,86 @@ export default function Fight (props) {
   let [myEnhance, setMyEnhance] = useState(false)
   let [opEnhance, setOpEnhance] = useState(false)
 
-
   // 道具数量
-  let [isBloodUsed,setBloodUsed] = useState(false);
-  let [isBallUsed,setBallUsed] = useState(false);
-  let [isPPUsed,setPPUsed] = useState(false);
+  let [isPropUsed, setPropUsed] = useState([false, false, false])
 
-  // 播放战斗动画
-  function switchStatus (func, func2) {
-    setMask(true)
-    func(true)
-    setTimeout(() => {
-      func(false)
-      func2(true)
-      setTimeout(() => {
-        func2(false)
-        setMask(false)
-      }, 2000)
-    }, 2000)
+  // 精灵信息
+  let [mybld, setMybld] = useState(mySpirit[0].blood)
+  // let [myatk, setMyatk] = useState(mySpirit[0].attack)
+  // let [mydfc, setMydfc] = useState(mySpirit[0].defence)
+  let [myatk, setMyatk] = useState(5)
+  let [mydfc, setMydfc] = useState(5)
+  let [myspd, setMyspd] = useState(mySpirit[0].speed)
+
+  let [opbld, setOpbld] = useState(opponent.blood)
+  // let [opatk, setOpatk] = useState(opponent.attack)
+  // let [opdfc, setOpdfc] = useState(opponent.defence)
+  let [opatk, setOpatk] = useState(10)
+  let [opdfc, setOpdfc] = useState(10)
+  let [opspd, setOpspd] = useState(opponent.speed)
+
+  // 技能相关
+  // 数量
+  let originTimes = [
+    mySpirit[0].skills[0].times,
+    mySpirit[0].skills[1].times,
+    mySpirit[0].skills[2].times,
+    mySpirit[0].skills[3].times
+  ]
+  let [times, setTimes] = useState(originTimes)
+
+  // 技能使用记录
+  let [skillLog, setLog] = useState('')
+
+  // 计算伤害值
+  /**
+   *
+   * @param {} hurt 伤害值
+   * @param {*} my_attack 攻击方的attack
+   * @param {*} op_defence 防御方的defence
+   * @param {*} base 基准值
+   */
+  function calHurt (hurt, my_attack, op_defence, base) {
+    if (hurt <= 0) return 0
+    return hurt * my_attack - op_defence * base
   }
+
+  // 精灵使用技能
+  function useSkill (myskillIdx, opskillIdx) {
+    // 设置遮罩
+    setMask(true)
+    // 我方攻击
+    let newTimes = [...times]
+    newTimes[myskillIdx]--
+    setTimes(newTimes)
+    setMyAttack(true)
+    setTimeout(() => {
+      setMyAttack(false)
+      let hurt = calHurt(3, myatk, mydfc, 15)
+      setOpbld(hurt < opbld ? opbld - hurt : 0)
+    }, 2000)
+
+    // 敌方攻击,延迟执行
+    setTimeout(() => {
+      setOpEnhance(true)
+      setTimeout(() => {
+        setOpEnhance(false)
+        let hurt = calHurt(3, opatk, opdfc, 15)
+        console.log(hurt)
+        setMybld(hurt < mybld ? mybld - hurt : 0)
+      }, 2000)
+      setLog(
+        `<li>敌方精灵使用了【${opponent.skills[opskillIdx].name}】</li>` +
+          `<li>我方精灵使用了【${mySpirit[0].skills[myskillIdx].name}】</li>` +
+          skillLog
+      )
+      setMask(false)
+    }, 4000)
+  }
+
+  function useProp (idx, opSkillIdx) {}
+
+  // UI
   return (
     <div className='f-container flex-between-center-col'>
       <ReactAudioPlayer
@@ -49,7 +114,13 @@ export default function Fight (props) {
         loop
       />
       <div className='f-blood flex-around-center'>
-        <Blood name='烈焰星星' direction='left' rate='100' all='100' cur='60' />
+        <Blood
+          name={`${mySpirit[0].name}(${mySpirit[0].nature})`}
+          direction='left'
+          rate={userInfo.exp / 100}
+          all={mySpirit[0].blood}
+          cur={mybld}
+        />
         <svg
           t='1637586215597'
           viewBox='0 0 1024 1024'
@@ -67,64 +138,72 @@ export default function Fight (props) {
         </svg>
         <Blood
           direction='right'
-          name='烈焰星星'
-          rate='100'
-          all='100'
-          cur='80'
+          name={`${opponent.name}(${opponent.nature})`}
+          rate={opponent.type === 'boss' ? '???' : userInfo.exp / 100}
+          all={opponent.blood}
+          cur={opbld}
         />
       </div>
       <div className='f-move flex-between-center'>
         <div className={myAttack ? 'my-attack' : myEnhance ? 'my-enhance' : ''}>
           <img
             className='spirit s-left'
-            alt=""
-            src={require('../../assets/images/spirit/1.png').default}
+            alt=''
+            src={spiritsImg[mySpirit[0].id]}
           />
         </div>
         <div className={opAttack ? 'op-attack' : opEnhance ? 'op-enhance' : ''}>
           <img
-          alt=""
+            alt=''
             className='spirit s-right'
-            src={require('../../assets/images/spirit/21.png').default}
+            src={spiritsImg[opponent.id]}
           />
         </div>
       </div>
       <div className='f-panel flex-between-center'>
-        <div className='f-log'>
-          <li>我方精灵使用了【火焰车】</li>
-        </div>
+        <div
+          className='f-log'
+          dangerouslySetInnerHTML={{ __html: skillLog }}
+        ></div>
         {Ptype ? (
           // 技能面板
           <div className='f-left flex-around-center-wrap'>
-            <Button
-              onClick={switchStatus.bind(this, setMyAttack, setOpAttack)}
-              size='small'
-              pop='true'
-              poptip='技能1'
-            >
-              技能1
-            </Button>
-            <Button
-              onClick={switchStatus.bind(this, setMyEnhance, setOpEnhance)}
-              size='small'
-              pop='true'
-              poptip='技能1'
-            >
-              技能2
-            </Button>
-            <Button size='small' pop='true' poptip='技能1'>
-              技能1
-            </Button>
-            <Button size='small' pop='true' poptip='技能1'>
-              技能1
-            </Button>
+            {mySpirit[0].skills.map((item, idx) => {
+              return (
+                <Button
+                  onClick={
+                    times[idx] > 0
+                      ? useSkill.bind(this, idx, parseInt(Math.random() * 4))
+                      : null
+                  }
+                  size='small'
+                  pop='true'
+                  poptip={item.description}
+                >
+                  {`${item.name}(${times[idx]})`}
+                </Button>
+              )
+            })}
           </div>
         ) : (
           // 道具界面
           <div className='f-left flex-around-center-wrap'>
-            <Block onClick={switchStatus.bind(this,setBallUsed,setOpAttack)} pop={true} poptip={propsInfo[0].intro} text={isBallUsed ? "0" : "1"} img={propsImg[0]} size='small'></Block>
-            <Block onClick={switchStatus.bind(this,setBloodUsed,setOpAttack)} pop={true} poptip={propsInfo[1].intro} text={isBloodUsed ? "0" : "1"} img={propsImg[1]} size='small'></Block>
-            <Block onClick={switchStatus.bind(this,setPPUsed,setOpAttack)} pop={true} poptip={propsInfo[2].intro} text={isPPUsed ? "0" : "1"} img={propsImg[2]} size='small'></Block>
+            {[0, 1, 2].map(item => {
+              return (
+                <Block
+                  onClick={useProp.bind(
+                    this,
+                    item,
+                    parseInt(Math.random() * 4)
+                  )}
+                  pop={true}
+                  poptip={propsInfo[item].intro}
+                  text={isPropUsed[item] ? '0' : '1'}
+                  img={propsImg[item]}
+                  size='small'
+                ></Block>
+              )
+            })}
           </div>
         )}
 
@@ -135,7 +214,15 @@ export default function Fight (props) {
           <Button size='small' onClick={setType.bind(this, false)}>
             道具
           </Button>
-          <Button size='small' onClick={navigate.bind(this,props.history,'确定要逃跑吗？','/game')}>
+          <Button
+            size='small'
+            onClick={navigate.bind(
+              this,
+              props.history,
+              '确定要逃跑吗？',
+              '/game'
+            )}
+          >
             逃跑
           </Button>
         </div>
