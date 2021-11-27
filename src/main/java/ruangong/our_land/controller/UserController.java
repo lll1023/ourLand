@@ -80,4 +80,23 @@ public class UserController {
             return ResultInfo.error(500,"登录失败:密码错误");
         }
     }
+
+    /**
+     * 获取用户信息
+     * @param uId 用户id
+     * @return
+     */
+    @PostMapping("/getUser")
+    public ResultInfo getUser(@RequestParam("id") @Valid Integer uId){
+        User user = userService.findById(uId);
+        if (user != null){
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(user, userDto);
+            userDto.setProps_bag(userService.findProp(uId).stream().map(UserProp::getP_id).collect(Collectors.toList()));
+            userDto.setSpirits_bag(userService.findSpirit(uId).stream().map(UserSpirit::getS_id).collect(Collectors.toList()));
+            return ResultInfo.success(userDto);
+        }else {
+            return ResultInfo.success("用户id有误");
+        }
+    }
 }
