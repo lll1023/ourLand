@@ -96,6 +96,20 @@
   }
 }
 
+.my-catch {
+  animation: catch 2s ease;
+}
+.my-catch::before {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 200px;
+}
+
+@keyframes catch {
+  
+}
+
 .f-panel {
   width: 100%;
   height: 200px;

@@ -21,6 +21,9 @@ export const User = {
 export const Spirit = {
     getSpiritById : function(data) {
         return Request.post("/map/getSpirit",data);
+    },
+    getRandomMonster : function() {
+        return Request.get("/map/getMonster");
     }
 }
 
@@ -29,5 +32,8 @@ export const Spirit = {
 export const Fight = {
     getFightInfo : function(data) {
         return Request.post("/spirit/getInfo",data);
+    },
+    saveFightRes : function(data) {
+        return Request.post('/spirit/save',data);
     }
 }

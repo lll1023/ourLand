@@ -24,7 +24,7 @@ export default function PropsBag (props) {
       </div>
       <div className='flex-around-center'>
         <div className='sb-left flex-around-center-wrap'>
-          {[0, 1, 2].map((item) => {
+          {[0, 1, 2].map((item,idx) => {
             return (
               <Block
                 onClick={switchSpirit.bind(
@@ -36,6 +36,7 @@ export default function PropsBag (props) {
                 text=''
                 img={imgs[item]}
                 size='medium'
+                key={idx}
               ></Block>
             )
           })}
@@ -45,7 +46,7 @@ export default function PropsBag (props) {
           <div className='sb-img'>
             <img src={selected} alt='' />
           </div>
-          <div className='sb-props flex-center-center-wrap'>
+          <div className='flex-center-center-wrap'>
             效果：{prop.intro}
           </div>
         </div>

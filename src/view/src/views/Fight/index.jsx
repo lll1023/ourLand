@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import './index.css'
+import { message } from 'antd'
+import { withRouter } from 'react-router'
+import { Fight } from '../../utils/api'
 import Blood from '../../components/Blood'
 import Button from '../../components/Button'
 import Block from '../../components/Block'
@@ -7,14 +10,16 @@ import ReactAudioPlayer from 'react-audio-player'
 import propsImg from '../../data/propsImg'
 import propsInfo from '../../data/propsInfo'
 import spiritsImg from '../../data/spiritsImg'
-import { navigate } from '../../utils/utils'
-
+import { navigate } from '../../utils/utils' 
 // 战斗界面
 
-export default function Fight (props) {
+function FightC (props) {
   const opponent = JSON.parse(localStorage.getItem('opponent'))
-  const mySpirit = JSON.parse(localStorage.getItem('mySpirit'))
+  const opponent_base = opponent.type === 'boss' ? 60 : 15
+  const readySp = JSON.parse(localStorage.getItem('ready'))
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  const origin_blood = readySp.blood + (userInfo.exp/100) * 6;
+  const oppnent_blood = opponent.type !== 'boss' ? opponent.blood + (userInfo.exp/100) * 6 : opponent.blood ;
   // 是否遮罩
   let [isMask, setMask] = useState(false)
   // 面板类型
@@ -25,32 +30,29 @@ export default function Fight (props) {
   let [opAttack, setOpAttack] = useState(false)
   let [myEnhance, setMyEnhance] = useState(false)
   let [opEnhance, setOpEnhance] = useState(false)
+  let [myCatch,setMyCatch] = useState(false);
 
   // 道具数量
-  let [isPropUsed, setPropUsed] = useState([false, false, false])
+  let [isPropUsed, setPropUsed] = useState([3, 3, 3])
 
   // 精灵信息
-  let [mybld, setMybld] = useState(mySpirit[0].blood)
-  // let [myatk, setMyatk] = useState(mySpirit[0].attack)
-  // let [mydfc, setMydfc] = useState(mySpirit[0].defence)
-  let [myatk, setMyatk] = useState(5)
-  let [mydfc, setMydfc] = useState(5)
-  let [myspd, setMyspd] = useState(mySpirit[0].speed)
+  let [mybld, setMybld] = useState(origin_blood)
+  let [myatk, setMyatk] = useState(readySp.attack)
+  let [mydfc, setMydfc] = useState(readySp.defence)
+  let [myspd, setMyspd] = useState(readySp.speed)
 
-  let [opbld, setOpbld] = useState(opponent.blood)
-  // let [opatk, setOpatk] = useState(opponent.attack)
-  // let [opdfc, setOpdfc] = useState(opponent.defence)
-  let [opatk, setOpatk] = useState(10)
-  let [opdfc, setOpdfc] = useState(10)
+  let [opbld, setOpbld] = useState(oppnent_blood)
+  let [opatk, setOpatk] = useState(opponent.attack)
+  let [opdfc, setOpdfc] = useState(opponent.defence)
   let [opspd, setOpspd] = useState(opponent.speed)
 
   // 技能相关
   // 数量
   let originTimes = [
-    mySpirit[0].skills[0].times,
-    mySpirit[0].skills[1].times,
-    mySpirit[0].skills[2].times,
-    mySpirit[0].skills[3].times
+    readySp.skills[0].times,
+    readySp.skills[1].times,
+    readySp.skills[2].times,
+    readySp.skills[3].times
   ]
   let [times, setTimes] = useState(originTimes)
 
@@ -66,44 +68,251 @@ export default function Fight (props) {
    * @param {*} base 基准值
    */
   function calHurt (hurt, my_attack, op_defence, base) {
-    if (hurt <= 0) return 0
-    return hurt * my_attack - op_defence * base
+    let res = hurt * my_attack - op_defence * base
+    return res > 0 ? res : 0
+  }
+
+  // 检查游戏是否结束
+  function checkIfOver () {
+    if (opbld <= 0) {
+      alert('恭喜您胜利了！')
+      props.history.push({
+        pathname: '/game'
+      })
+    } else if (mybld <= 0) {
+      alert('失败！再去提升一下等级吧！')
+      props.history.push({
+        pathname: '/game'
+      })
+    }
+  }
+
+  // 使用伤害型技能
+  /**
+   *
+   * @param {*} role true为我方，false为对方
+   */
+  function hurtSkill (role, skillIdx) {
+    if (role) {
+      // 我方攻击
+      let newTimes = [...times]
+      newTimes[skillIdx]--
+      setTimes(newTimes)
+      setMyAttack(true)
+      setTimeout(() => {
+        setMyAttack(false)
+        let baseHurt = parseInt(
+          readySp.skills[skillIdx].description.split('威力')[1]
+        )
+        let hurt = calHurt(baseHurt, myatk, mydfc, 15)
+        if (hurt == 0) {
+          message.warning('我方伤害太低啦！用属性提升技能提升攻击！')
+        }
+        setOpbld(opbld - hurt < 0 ? 0 : opbld - hurt)
+        checkIfOver()
+      }, 2000)
+    } else {
+      // 敌方攻击
+      setOpAttack(true)
+      setTimeout(() => {
+        setOpAttack(false)
+        let baseHurt = parseInt(
+          opponent.skills[skillIdx].description.split('威力')[1]
+        )
+        let hurt = calHurt(baseHurt, opatk, opdfc, opponent_base)
+        console.log(hurt)
+        setMybld(mybld - hurt < 0 ? 0 : mybld - hurt)
+        checkIfOver()
+      }, 2000)
+    }
+  }
+
+  // 使用增益型技能
+  function enhanceSkill (role, skillIdx) {
+    if (role) {
+      // 我方增强
+      let newTimes = [...times]
+      newTimes[skillIdx]--
+      setTimes(newTimes)
+      setMyEnhance(true)
+      setTimeout(() => {
+        setMyEnhance(false)
+        let skill = readySp.skills[skillIdx].description
+        if (skill.indexOf('全属性') == -1) {
+          let effects = skill.split(',')
+          effects.map(item => {
+            let map = item.split('+')
+            if (map[0] == '攻击') {
+              setMyatk(myatk + parseInt(map[1]))
+            } else if (map[0] == '防御') {
+              setMydfc(mydfc + parseInt(map[1]))
+            } else if (map[0] == '速度') {
+              setMyspd(myspd + parseInt(map[1]))
+            }
+          })
+        } else {
+          // 全属性提升
+          setMyatk(myatk + 1)
+          setMydfc(mydfc + 1)
+          setMyspd(myspd + 1)
+        }
+      }, 2000)
+    } else {
+      // 敌方增强
+      setOpEnhance(true)
+      setTimeout(() => {
+        setOpEnhance(false)
+        let skill = opponent.skills[skillIdx].description
+        if (skill.indexOf('全属性') == -1) {
+          let effects = skill.split(',')
+          effects.map(item => {
+            let map = item.split('+')
+            if (map[0] == '攻击') {
+              setOpatk(opatk + parseInt(map[1]))
+            } else if (map[0] == '防御') {
+              setOpdfc(opdfc + parseInt(map[1]))
+            } else if (map[0] == '速度') {
+              setOpspd(opspd + parseInt(map[1]))
+            }
+          })
+        } else {
+          // 全属性提升
+          setOpatk(opatk + 1)
+          setOpdfc(opdfc + 1)
+          setOpspd(opspd + 1)
+        }
+      }, 2000)
+    }
   }
 
   // 精灵使用技能
   function useSkill (myskillIdx, opskillIdx) {
+    console.log(myskillIdx,opskillIdx)
     // 设置遮罩
     setMask(true)
-    // 我方攻击
-    let newTimes = [...times]
-    newTimes[myskillIdx]--
-    setTimes(newTimes)
-    setMyAttack(true)
-    setTimeout(() => {
-      setMyAttack(false)
-      let hurt = calHurt(3, myatk, mydfc, 15)
-      setOpbld(hurt < opbld ? opbld - hurt : 0)
-    }, 2000)
+    // 判断敌我速度
+    if (myspd >= opspd) {
+      // 我方操作
+      if (readySp.skills[myskillIdx].type === '伤害型') {
+        hurtSkill(true, myskillIdx)
+      } else {
+        enhanceSkill(true, myskillIdx)
+      }
 
-    // 敌方攻击,延迟执行
-    setTimeout(() => {
-      setOpEnhance(true)
+      // 敌方操作,延迟执行
       setTimeout(() => {
-        setOpEnhance(false)
-        let hurt = calHurt(3, opatk, opdfc, 15)
-        console.log(hurt)
-        setMybld(hurt < mybld ? mybld - hurt : 0)
+        if (opponent.skills[opskillIdx].type === '伤害型') {
+          hurtSkill(false, opskillIdx)
+        } else {
+          enhanceSkill(false, opskillIdx)
+        }
+        setLog(
+          `<li>敌方精灵使用了【${opponent.skills[opskillIdx].name}】</li>` +
+            `<li>我方精灵使用了【${readySp.skills[myskillIdx].name}】</li>` +
+            skillLog
+        )
+        setMask(false)
+      }, 4000)
+    } else {
+      // 敌方操作
+      if (opponent.skills[opskillIdx].type === '伤害型') {
+        hurtSkill(true, opskillIdx)
+      } else {
+        enhanceSkill(true, opskillIdx)
+      }
+
+      // 我方操作,延迟执行
+      setTimeout(() => {
+        if (readySp.skills[myskillIdx].type === '伤害型') {
+          hurtSkill(false, myskillIdx)
+        } else {
+          enhanceSkill(false, myskillIdx)
+        }
+        setLog(
+          `<li>我方精灵使用了【${readySp.skills[myskillIdx].name}】</li>` +
+            `<li>敌方精灵使用了【${opponent.skills[opskillIdx].name}】</li>` +
+            skillLog
+        )
+        setMask(false)
+      }, 4000)
+    }
+  }
+
+  // 我方使用道具
+  function useProp (idx, opskillIdx) {
+    let newUsed = [...isPropUsed]
+    newUsed[idx]--
+    setPropUsed(newUsed)
+    // 设置遮罩
+    setMask(true)
+    let propname = ''
+    // 我方操作
+    if (idx == 1) {
+      propname = '血包'
+      setMyEnhance(true)
+      setTimeout(() => {
+        setMyEnhance(false)
+        setMybld(origin_blood)
       }, 2000)
+    } else if (idx == 2) {
+      propname = '补给'
+      setMyEnhance(true)
+      setTimeout(() => {
+        setMyEnhance(false)
+        setTimes(originTimes)
+      }, 2000)
+    } else {
+      // 捕捉精灵
+      propname = '精灵球'
+      let isCatch = Math.random() * 100 < 30
+      if (isCatch) {
+        message.success('捉到啦!')
+        saveResult(true, true)
+      } else {
+        message.error('捕捉失败！')
+      }
+    }
+
+    // 敌方操作，延迟执行
+    setTimeout(() => {
+      if (opponent.skills[opskillIdx].type === '伤害型') {
+        hurtSkill(false, opskillIdx)
+      } else {
+        enhanceSkill(false, opskillIdx)
+      }
+
       setLog(
         `<li>敌方精灵使用了【${opponent.skills[opskillIdx].name}】</li>` +
-          `<li>我方精灵使用了【${mySpirit[0].skills[myskillIdx].name}】</li>` +
+          `<li>我方精灵使用了【${propname}】</li>` +
           skillLog
       )
       setMask(false)
     }, 4000)
   }
 
-  function useProp (idx, opSkillIdx) {}
+  // 保存战斗结果
+  /**
+   *
+   * @param {*} isWin 是否胜利
+   * @param {*} isCatch 是否捕捉
+   */
+  function saveResult (isWin, isCatch) {
+    let data = new FormData()
+    data.append('userId', userInfo.id)
+    data.append('bossId', opponent.id)
+    data.append('isWin', isWin)
+    data.append('isCatch', isCatch)
+    Fight.saveFightRes(data).then(res => {
+      if(res.data.status === 200) {
+        message.success('恭喜您捕捉到新的精灵！去背包看看吧！');
+      }else {
+        message.error(res.data.message)
+      }
+      props.history.push({
+        pathname: '/game'
+      })
+    })
+  }
 
   // UI
   return (
@@ -115,11 +324,12 @@ export default function Fight (props) {
       />
       <div className='f-blood flex-around-center'>
         <Blood
-          name={`${mySpirit[0].name}(${mySpirit[0].nature})`}
+          name={`${readySp.name}(${readySp.nature})`}
           direction='left'
           rate={userInfo.exp / 100}
-          all={mySpirit[0].blood}
+          all={origin_blood }
           cur={mybld}
+          isRare={readySp.isRare}
         />
         <svg
           t='1637586215597'
@@ -140,17 +350,14 @@ export default function Fight (props) {
           direction='right'
           name={`${opponent.name}(${opponent.nature})`}
           rate={opponent.type === 'boss' ? '???' : userInfo.exp / 100}
-          all={opponent.blood}
+          all={opponent.type === 'boss' ? opponent.blood : oppnent_blood}
           cur={opbld}
+          isRare={readySp.isRare}
         />
       </div>
       <div className='f-move flex-between-center'>
-        <div className={myAttack ? 'my-attack' : myEnhance ? 'my-enhance' : ''}>
-          <img
-            className='spirit s-left'
-            alt=''
-            src={spiritsImg[mySpirit[0].id]}
-          />
+        <div className={myAttack ? 'my-attack' : myEnhance ? 'my-enhance' : myCatch ? "my-catch" : 'null'}>
+          <img className='spirit s-left' alt='' src={spiritsImg[readySp.id]} />
         </div>
         <div className={opAttack ? 'op-attack' : opEnhance ? 'op-enhance' : ''}>
           <img
@@ -168,7 +375,7 @@ export default function Fight (props) {
         {Ptype ? (
           // 技能面板
           <div className='f-left flex-around-center-wrap'>
-            {mySpirit[0].skills.map((item, idx) => {
+            {readySp.skills.map((item, idx) => {
               return (
                 <Button
                   onClick={
@@ -179,6 +386,7 @@ export default function Fight (props) {
                   size='small'
                   pop='true'
                   poptip={item.description}
+                  key={idx}
                 >
                   {`${item.name}(${times[idx]})`}
                 </Button>
@@ -188,19 +396,20 @@ export default function Fight (props) {
         ) : (
           // 道具界面
           <div className='f-left flex-around-center-wrap'>
-            {[0, 1, 2].map(item => {
+            {[0, 1, 2].map((item, idx) => {
               return (
                 <Block
-                  onClick={useProp.bind(
-                    this,
-                    item,
-                    parseInt(Math.random() * 4)
-                  )}
+                  onClick={
+                    isPropUsed[item] > 0
+                      ? useProp.bind(this, item, parseInt(Math.random() * 4))
+                      : null
+                  }
                   pop={true}
                   poptip={propsInfo[item].intro}
-                  text={isPropUsed[item] ? '0' : '1'}
+                  text={isPropUsed[item]}
                   img={propsImg[item]}
                   size='small'
+                  key={idx}
                 ></Block>
               )
             })}
@@ -236,3 +445,5 @@ export default function Fight (props) {
     </div>
   )
 }
+
+export default withRouter(FightC)

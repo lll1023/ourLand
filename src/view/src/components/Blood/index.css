@@ -25,3 +25,7 @@
     width: 100%;
     color: white;
 }
+
+.bld-title {
+    text-shadow: 1px 1px 1px black;
+}
