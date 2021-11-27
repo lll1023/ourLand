@@ -9,6 +9,7 @@ import ruangong.our_land.service.UserService;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Lsutin
@@ -27,8 +28,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findById(Integer uId) {
+        return userMapper.findById(uId);
+    }
+
+    @Override
     public Integer insertUser(String uName, String uPwd) {
         return userMapper.insertUser(uName, uPwd);
+    }
+
+    @Override
+    public Integer updateUser(Map<String, Object> param) {
+        return userMapper.updateUser(param);
     }
 
     @Override

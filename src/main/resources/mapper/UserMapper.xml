@@ -30,10 +30,35 @@
         WHERE u_name = #{uName}
     </select>
 
+    <select id="findById" resultMap="userResultMap">
+        SELECT *
+        FROM user
+        WHERE u_id = #{uId}
+    </select>
+
     <insert id="insertUser">
         INSERT INTO user(u_name, u_pwd)
         VALUES (#{uName}, #{uPwd})
     </insert>
+
+    <update id="updateUser">
+        UPDATE user
+        <set>
+            <if test="uName != null">
+                u_name = #{uName},
+            </if>
+            <if test="uPwd != null">
+                u_pwd = #{uPwd},
+            </if>
+            <if test="uProgress != null">
+                u_progress = #{uProgress},
+            </if>
+            <if test="uExp != null">
+                u_exp = #{uExp}
+            </if>
+        </set>
+        WHERE u_id = #{uId}
+    </update>
 
     <select id="findProp" resultMap="userPropResultMap">
         SELECT *
