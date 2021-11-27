@@ -2,8 +2,7 @@ package ruangong.our_land.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,9 +10,6 @@ import ruangong.our_land.model.ResultInfo;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @Author: Lsutin
@@ -31,13 +27,9 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     public ResultInfo bindExceptionHandler(BindException e){
-        HashMap<String, String> map = new HashMap<>();
-        List<FieldError> fieldErrors = e.getFieldErrors();
-        for (FieldError fieldError:fieldErrors){
-            map.put(fieldError.getField(),fieldError.getRejectedValue()+","+fieldError.getDefaultMessage());
-        }
-        log.warn("参数错误：{}",map);
-        return ResultInfo.error(map);
+        String error=e.getFieldError().getDefaultMessage();
+        log.warn("参数错误：{}",error);
+        return ResultInfo.error(error);
     }
 
     /**
@@ -47,14 +39,9 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResultInfo methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e){
-        BindingResult result = e.getBindingResult();
-        HashMap<String, String> map = new HashMap<>();
-        List<FieldError> fieldErrors = result.getFieldErrors();
-        for (FieldError fieldError:fieldErrors){
-            map.put(fieldError.getField(),fieldError.getRejectedValue()+","+fieldError.getDefaultMessage());
-        }
-        log.warn("参数错误：{}",map);
-        return ResultInfo.error(map);
+        String error=e.getFieldError().getDefaultMessage();
+        log.warn("参数错误：{}",error);
+        return ResultInfo.error(error);
     }
 
     /**
@@ -64,14 +51,25 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResultInfo constraintViolationExceptionHandler(ConstraintViolationException  e){
-        Set<ConstraintViolation<?>> set = e.getConstraintViolations();
-        HashMap<String, String> map = new HashMap<>();
-        for (ConstraintViolation violation:set){
-            String path = violation.getPropertyPath().toString();
-            map.put(path.substring(path.lastIndexOf(".")+1),violation.getMessage());
+        String error="";
+        System.out.println(e.getMessage());
+        for (ConstraintViolation violation:e.getConstraintViolations()){
+            error=violation.getMessage();
+            break;
         }
-        log.warn("参数错误：{}",map);
-        return ResultInfo.error(map);
+        log.warn("参数错误：{}",error);
+        return ResultInfo.error(error);
+    }
+
+    /**
+     * 用于请求的method是否正确
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResultInfo httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e){
+        System.out.println(e.getMethod());
+        return ResultInfo.error(e.getMessage());
     }
 
     /**
