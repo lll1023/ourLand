@@ -1,10 +1,7 @@
 package ruangong.our_land.controller;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ruangong.our_land.aspect.WebLog;
 import ruangong.our_land.model.ResultInfo;
 import ruangong.our_land.model.dto.UserDto;
@@ -44,7 +41,7 @@ public class UserController {
         User user;
         user = userService.findByName(uName);
         if (user != null){
-            return ResultInfo.success("注册失败:用户名已存在");
+            return ResultInfo.error(500,"注册失败:用户名已存在");
         }else {
             int insert;
             insert = userService.insertUser(uName, uPwd);
@@ -71,7 +68,7 @@ public class UserController {
                             @RequestParam("password") String uPwd){
         User user = userService.findByName(uName);
         if (user == null){
-            return ResultInfo.success("登录失败:该用户不存在");
+            return ResultInfo.error(500,"登录失败:该用户不存在");
         }else if (user.getPassword().equals(uPwd)){
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(user, userDto);
@@ -79,7 +76,7 @@ public class UserController {
             userDto.setSpirits_bag(userService.findSpirit(user.getId()).stream().map(UserSpirit::getS_id).collect(Collectors.toList()));
             return ResultInfo.success(userDto);
         }else {
-            return ResultInfo.success("登录失败:密码错误");
+            return ResultInfo.error(500,"登录失败:密码错误");
         }
     }
 }
