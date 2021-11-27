@@ -5,6 +5,7 @@ import ruangong.our_land.model.user.UserProp;
 import ruangong.our_land.model.user.UserSpirit;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Lsutin
@@ -21,12 +22,26 @@ public interface UserService {
     User findByName(String uName);
 
     /**
+     * 根据用户id获取用户实体
+     * @param uId 用户id
+     * @return
+     */
+    User findById(Integer uId);
+
+    /**
      * 插入用户
      * @param uName 用户名
      * @param uPwd 用户密码
      * @return
      */
     Integer insertUser(String uName, String uPwd);
+
+    /**
+     * 更新用户
+     * @param param 参数map
+     * @return
+     */
+    Integer updateUser(Map<String, Object> param);
 
     /**
      * 根据用户id获取拥有道具
