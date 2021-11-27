@@ -68,8 +68,9 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResultInfo httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e){
-        System.out.println(e.getMethod());
-        return ResultInfo.error(e.getMessage());
+        String error = e.getMessage();
+        log.warn("method错误：{}",error);
+        return ResultInfo.error(error);
     }
 
     /**
