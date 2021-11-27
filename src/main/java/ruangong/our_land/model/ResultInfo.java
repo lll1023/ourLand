@@ -33,13 +33,7 @@ public class ResultInfo {
     public static ResultInfo error(String message){
         return new ResultInfo(400, message);
     }
-    public static ResultInfo error(Object data){
-        return new ResultInfo(400, data);
-    }
     public static ResultInfo error(int status,String message){
         return new ResultInfo(status, message);
-    }
-    public static ResultInfo error(int status,Object data){
-        return new ResultInfo(status, data);
     }
 }

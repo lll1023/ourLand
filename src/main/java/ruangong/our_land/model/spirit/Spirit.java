@@ -40,17 +40,17 @@ public abstract class Spirit {
      * 攻击力
      */
     @Min(value = 0)
-    private static int attack;
+    private int attack;
     /**
      * 防御力
      */
     @Min(value = 0)
-    private static int defence;
+    private int defence;
     /**
      * 速度
      */
     @Min(value = 0)
-    private static int speed;
+    private int speed;
     /**
      * 精灵名
      */
