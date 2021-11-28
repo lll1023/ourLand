@@ -20,5 +20,6 @@ export default [
   require("../assets/images/spirit/18.png").default,
   require("../assets/images/spirit/19.png").default,
   require("../assets/images/spirit/20.png").default,
-  require("../assets/images/spirit/21.png").default
+  require("../assets/images/spirit/21.png").default,
+  require("../assets/images/spirit/22.png").default,
 ];
