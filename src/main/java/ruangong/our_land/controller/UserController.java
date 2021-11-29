@@ -1,6 +1,7 @@
 package ruangong.our_land.controller;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ruangong.our_land.aspect.WebLog;
 import ruangong.our_land.model.ResultInfo;
@@ -11,7 +12,8 @@ import ruangong.our_land.model.user.UserSpirit;
 import ruangong.our_land.service.UserService;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/11/2 14:35
  * @describe:
  */
+@Validated
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -37,8 +40,8 @@ public class UserController {
      */
     @PostMapping("/register")
     @WebLog(message = "用户注册")
-    public ResultInfo register(@RequestParam("username") @Valid String uName,
-                               @RequestParam("password") @Valid String uPwd){
+    public ResultInfo register(@RequestParam("username") @NotBlank String uName,
+                               @RequestParam("password") @NotBlank String uPwd){
         User user;
         user = userService.findByName(uName);
         if (user != null){
@@ -65,8 +68,8 @@ public class UserController {
      */
     @PostMapping("/login")
     @WebLog(message = "用户登录")
-    public ResultInfo login(@RequestParam("username") @Valid String uName,
-                            @RequestParam("password") @Valid String uPwd){
+    public ResultInfo login(@RequestParam("username") @NotBlank String uName,
+                            @RequestParam("password") @NotBlank String uPwd){
         User user = userService.findByName(uName);
         if (user == null){
             return ResultInfo.error(500,"登录失败:该用户不存在");
@@ -87,7 +90,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/getUser")
-    public ResultInfo getUser(@RequestParam("id") @Valid Integer uId){
+    public ResultInfo getUser(@RequestParam("id") @Min(1) Integer uId){
         User user = userService.findById(uId);
         if (user != null){
             UserDto userDto = new UserDto();
