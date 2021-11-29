@@ -15,7 +15,6 @@ function StoryPanel (props) {
       hide()
       if (res.data.status == 200) {
         localStorage.setItem('opponent', JSON.stringify(res.data.data.bossInfo));
-        localStorage.setItem('mySpirit', JSON.stringify(res.data.data.userInfo));
         message.success('加载成功！进入战斗中...')
         navigate(props.history,"确认挑战这个boss吗？",'/fight');
       } else {

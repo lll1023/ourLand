@@ -14,6 +14,9 @@ export const User = {
     },
     login : function(data) {
         return Request.post("/user/login",data);
+    },
+    getUserInfo : function(data) {
+        return Request.post('/user/getUser',data);
     }
 }
 

@@ -58,6 +58,8 @@ class LoginPanel extends Component {
       if(res.data.status === 200) {
         message.success('登录成功!正在跳转');
         localStorage.setItem("userInfo",JSON.stringify(res.data.data));
+        let ready = {"attack":3,"defence":2,"speed":2,"name":"烈焰猩猩","id":1,"isRare":0,"level":0,"blood":60,"type":"初始","nature":"火","skills":[{"name":"火焰车","description":"威力60","times":4,"type":"伤害型","hurt":0,"id":1},{"name":"火焰旋涡","description":"威力65","times":4,"type":"伤害型","hurt":0,"id":2},{"name":"斗气升腾","description":"攻击+1","times":5,"type":"提升型","hurt":0,"id":3},{"name":"蜷缩","description":"防御+1","times":5,"type":"提升型","hurt":0,"id":4}],"exp":100}
+        localStorage.setItem("ready",JSON.stringify(ready));
         setTimeout(() => {
           that.props.history.push({
             pathname: '/game'

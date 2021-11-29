@@ -20,3 +20,8 @@
     flex: 33%;
 }
 
+.egg {
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+}

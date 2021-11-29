@@ -73,15 +73,15 @@ public class SpiritController {
         User user = userService.findById(uId);
         if (user != null){
             if (isWin){
-                Boss boss = spiritService.findBoss(bossId);
-                Monster monster = spiritService.findMonster(bossId);
                 Map<String, Object> param = new HashMap<>();
                 param.put("uId", uId);
                 param.put("uProgress", user.getProgress() + 1);
-                if (boss != null){
+                if(bossId >= 16) {
+                    Boss boss = spiritService.findBoss(bossId);
                     param.put("uExp", user.getExp() + boss.getExp());
                     userService.updateUser(param);
-                }else if (monster != null){
+                }else if(bossId >= 2) {
+                    Monster monster = spiritService.findMonster(bossId);
                     param.put("uExp", user.getExp() + monster.getExp());
                     userService.updateUser(param);
                 }else {

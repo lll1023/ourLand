@@ -3,7 +3,7 @@ import './index.css'
 
 // 血条
 export default function Blood (props) {
-  let { direction, rate, all, cur, name, isRare } = props
+  let { direction, rate, all, cur, name, isRare ,attack,defence,speed} = props
   let rest = parseInt((cur / all) * 100)
   return (
     <div className='blood-container flex-between-center-col'>
@@ -28,6 +28,17 @@ export default function Blood (props) {
         <span>LV.{rate}</span>
         <span>
           {cur}/{all}
+        </span>
+      </div>
+      <div className='blood-info flex-between-center'>
+        <span>
+          攻击：{attack}
+        </span>
+        <span>
+          防御：{defence}
+        </span>
+        <span>
+          速度：{speed}
         </span>
       </div>
     </div>
