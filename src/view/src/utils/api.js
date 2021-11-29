@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const DOMAIN = "http://localhost:8080/"
+const DOMAIN = "http://101.43.56.21/our_land/"
 const Request = axios.create({
     baseURL: DOMAIN
 })
