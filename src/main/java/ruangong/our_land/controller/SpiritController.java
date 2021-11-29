@@ -85,7 +85,7 @@ public class SpiritController {
                     param.put("uExp", user.getExp() + monster.getExp());
                     userService.updateUser(param);
                 }else {
-                    return ResultInfo.success("上传失败:怪物id有误");
+                    return ResultInfo.error(500,"上传失败:怪物id有误");
                 }
             }
             if (isCatch){
@@ -93,11 +93,11 @@ public class SpiritController {
                 if (!sIdList.contains(bossId)){
                     userService.insertUserSpirit(uId, bossId);
                 }else {
-                    return ResultInfo.success("背包已存在该精灵");
+                    return ResultInfo.error(500,"背包已存在该精灵");
                 }
             }
         }else {
-            return ResultInfo.success("上传失败:用户id有误");
+            return ResultInfo.error(500,"上传失败:用户id有误");
         }
         return ResultInfo.success("战斗结果已上传");
     }
