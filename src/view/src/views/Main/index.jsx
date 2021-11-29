@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './index.css'
 import Block from '../../components/Block'
@@ -8,7 +8,7 @@ import ReactAudioPlayer from 'react-audio-player'
 import { navigate } from '../../utils/utils'
 import { Spirit } from '../../utils/api'
 import { message } from 'antd'
-import {User} from "../../utils/api";
+import { User } from '../../utils/api'
 // 进入游戏之后的页面
 export default function Main (props) {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
@@ -47,17 +47,21 @@ export default function Main (props) {
     navigate(props.history, '确定要进入训练吗？', '/fight')
   }
 
-  useEffect(() => {
-    let data = new FormData();
-    data.append('id',userInfo.id);
+  // 获取用户信息
+  function getUser () {
+    let data = new FormData()
+    data.append('id', userInfo.id)
     User.getUserInfo(data).then(res => {
-      if(res.data.status == 200) {
-        localStorage.setItem('userInfo',JSON.stringify(res.data.data))
-      }else {
+      if (res.data.status == 200) {
+        localStorage.setItem('userInfo', JSON.stringify(res.data.data))
+      } else {
         message.warning(res.data.message)
       }
     })
-  });
+  }
+  useEffect(() => {
+    getUser();
+  })
 
   return (
     <div className='main-container flex-between-stretch-col'>
@@ -97,6 +101,7 @@ export default function Main (props) {
           <Block
             img={require('../../assets/images/icons/avatar.jpg').default}
             size='small'
+            onClick={getUser.bind(this)}
           />
         </div>
       </div>
@@ -144,7 +149,6 @@ export default function Main (props) {
           onClick={setPBShow.bind(this, true)}
           poptip={'道具背包'}
           pop={true}
-
         />
       </div>
 
