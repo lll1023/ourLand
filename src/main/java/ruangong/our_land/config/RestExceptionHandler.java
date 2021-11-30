@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ruangong.our_land.model.ResultInfo;
@@ -70,6 +71,13 @@ public class RestExceptionHandler {
     public ResultInfo httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e){
         String error = e.getMessage();
         log.warn("method错误：{}",error);
+        return ResultInfo.error(error);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResultInfo MissingServletRequestParameterExceptionHandler(MissingServletRequestParameterException e){
+        String error = e.getMessage();
+        log.warn("参数错误：{}",error);
         return ResultInfo.error(error);
     }
 

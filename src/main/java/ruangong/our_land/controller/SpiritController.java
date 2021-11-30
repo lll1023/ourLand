@@ -1,11 +1,11 @@
 package ruangong.our_land.controller;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ruangong.our_land.model.ResultInfo;
-import ruangong.our_land.model.spirit.Spirit;
 import ruangong.our_land.model.spirit.boss.Boss;
 import ruangong.our_land.model.spirit.monster.Monster;
 import ruangong.our_land.model.user.User;
@@ -14,7 +14,7 @@ import ruangong.our_land.service.SpiritService;
 import ruangong.our_land.service.UserService;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @Author hwy
  * @Date 2021/11/26
  */
-
+@Validated
 @RestController
 @RequestMapping("/spirit")
 public class SpiritController {
@@ -43,8 +43,8 @@ public class SpiritController {
      * @return
      */
     @PostMapping("/getInfo")
-    public ResultInfo getBattleInfo(@RequestParam("userId") @Valid Integer uId,
-                                    @RequestParam("bossId") @Valid Integer bossId){
+    public ResultInfo getBattleInfo(@RequestParam("userId") @Min(1) Integer uId,
+                                    @RequestParam("bossId") @Min(1) Integer bossId){
         Boss bossInfo = spiritService.findBoss(bossId);
         List<Integer> sIdList = userService.findSpirit(uId).stream().map(UserSpirit::getS_id).collect(Collectors.toList());
         List<Monster> userInfo = new ArrayList<>();
@@ -66,8 +66,8 @@ public class SpiritController {
      * @return
      */
     @PostMapping("/save")
-    public ResultInfo uploadResult(@RequestParam("userId") @Valid Integer uId,
-                                   @RequestParam("bossId") @Valid Integer bossId,
+    public ResultInfo uploadResult(@RequestParam("userId") @Min(1) Integer uId,
+                                   @RequestParam("bossId") @Min(1) Integer bossId,
                                    Boolean isWin,
                                    Boolean isCatch){
         User user = userService.findById(uId);
