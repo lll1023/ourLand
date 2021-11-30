@@ -28,6 +28,7 @@ class LoginPanel extends Component {
   register() {
     if(!this.state.username || !this.state.password) {
       message.warning("请输入相关信息！");
+      return ;
     }
     let data = new FormData();
     data.append('username',this.state.username);
@@ -48,6 +49,7 @@ class LoginPanel extends Component {
   login() {
     if(!this.state.username || !this.state.password) {
       message.warning("请输入相关信息！");
+      return;
     }
     let data = new FormData();
     data.append('username',this.state.username);

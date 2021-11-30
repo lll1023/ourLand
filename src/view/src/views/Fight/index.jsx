@@ -106,8 +106,8 @@ function FightC(props) {
     let p4 = p3 * 1.2 * base;
     let random = (Math.random() * (255 - 217) + 217) / 255;
     let res = parseInt(p4 * random);
-    console.log(p1, p2, p3, p4, random);
-    console.log(res);
+    // console.log(p1, p2, p3, p4, random);
+    // console.log(res);
     return res > 0 ? res : 0;
   }
 
@@ -227,7 +227,7 @@ function FightC(props) {
     // 设置遮罩
     setMask(true);
     // 判断敌我速度
-    console.log(myspd, opspd);
+    // console.log(myspd, opspd);
     if (myspd >= opspd) {
       // 我方操作
       if (readySp.skills[myskillIdx].type === "伤害型") {

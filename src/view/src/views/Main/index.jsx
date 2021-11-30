@@ -11,7 +11,8 @@ import { message } from 'antd'
 import { User } from '../../utils/api'
 // 进入游戏之后的页面
 export default function Main (props) {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  // let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  let [userInfo,setUser] = useState(JSON.parse(localStorage.getItem('userInfo')))
   let [isSpiritBagShow, setSBShow] = useState(false)
   let [isPropsBagShow, setPBShow] = useState(false)
 
@@ -54,14 +55,16 @@ export default function Main (props) {
     User.getUserInfo(data).then(res => {
       if (res.data.status == 200) {
         localStorage.setItem('userInfo', JSON.stringify(res.data.data))
+        setUser(res.data.data)
+        // userInfo = JSON.parse(localStorage.getItem('userInfo'))
       } else {
         message.warning(res.data.message)
       }
     })
   }
   useEffect(() => {
-    getUser();
-  })
+    getUser()
+  },[JSON.stringify(userInfo)])
 
   return (
     <div className='main-container flex-between-stretch-col'>
